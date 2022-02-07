@@ -4,22 +4,22 @@
 # Section with generic information about the study including title, description, publication details (if applicable) and contact details																																	
 																																	
 Comment[IDR Study Accession]	# leave blank																																
-Study Title	     Regulation of single-cell genome organization into TADs and chromatin nanodomains																															
-Study Type	 Epigenetics																													
+Study Title	         Regulation of single-cell genome organization into TADs and chromatin nanodomains																															
+Study Type	         Epigenetics or cell line																													
 Study Type Term Source REF	EFO																																
 Study Type Term Accession	EFO_0007550																																
-Study Description	The genome folds into a hierarchy of three-dimensional structures within the nucleus.
-                        At the sub-megabase scale, chromosomes form topologically associating domains (TADs)1–4. 
-                        However, how TADs fold in single cells is elusive. Here, we reveal TAD features inaccessible to cell population 
-			analysis by using super-resolution microscopy.
-			TAD structures and physical insulation associated with their borders are variable between individual cells, 
-			yet chromatin intermingling is enriched within TADs compared to adjacent TADs in most cells.
-                        The spatial segregation of TADs is further exacerbated during cell differentiation.
-			Favored interactions within TADs are regulated by cohesin and CTCF through distinct mechanisms:
-			cohesin generates chromatin contacts and intermingling while CTCF prevents inter-TAD contacts. 
-			Furthermore, TADs are subdivided into discrete nanodomains, which persist in cells depleted of CTCF or cohesin, 
-			whereas disruption of nucleosome contacts alters their structural organization. 
-                        Altogether, these results provide a physical basis for the folding of individual chromosomes at the nanoscale.																	
+Study Description	 The genome folds into a hierarchy of three-dimensional structures within the nucleus.
+                         At the sub-megabase scale, chromosomes form topologically associating domains (TADs)1–4. 
+                         However, how TADs fold in single cells is elusive. Here, we reveal TAD features inaccessible to cell population 
+			 analysis by using super-resolution microscopy.
+			 TAD structures and physical insulation associated with their borders are variable between individual cells, 
+			 yet chromatin intermingling is enriched within TADs compared to adjacent TADs in most cells.
+                         The spatial segregation of TADs is further exacerbated during cell differentiation.
+			 Favored interactions within TADs are regulated by cohesin and CTCF through distinct mechanisms:
+			 cohesin generates chromatin contacts and intermingling while CTCF prevents inter-TAD contacts. 
+			 Furthermore, TADs are subdivided into discrete nanodomains, which persist in cells depleted of CTCF or cohesin, 
+			 whereas disruption of nucleosome contacts alters their structural organization. 
+                         Altogether, these results provide a physical basis for the folding of individual chromosomes at the nanoscale.																	
 Study Key Words	# fill in																												
 Study Organism	# if more than one organism was studied, enter them in separate columns;  Chromosome , 																															
 Study Organism Term Source REF	NCBITaxon																																
@@ -30,8 +30,9 @@ Study Public Release Date	# enter a date of when the data can be made public
 																																	
 # Study Publication																																	
 Study PubMed ID	# fill in if known																																
-Study Publication Title	# fill in if known																																
-Study Author List	# fill in if known																																
+Study Publication Title   Regulation of single-cell genome organization into TADs and chromatin nanodomains																																
+Study Author List	  Quentin Szabo,  Axelle Donjon, Ivana Jerković , Giorgio L. Papadopoulos, Thierry Cheutin, Boyan Bonev , Elphège P. Nora , 
+                          Benoit G. Bruneau , Frédéric Bantignies , and Giacomo Cavalli 																																
 Study PMC ID	# fill in if known																																
 Study DOI	# fill in if known																																
 																																	
