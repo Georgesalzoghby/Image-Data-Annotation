@@ -2,6 +2,7 @@
 /shelf/
 /workspace.xml
 
+.idea
 /assays/*/*.tif
 /assays/*/*/*.tif
 /venv/
