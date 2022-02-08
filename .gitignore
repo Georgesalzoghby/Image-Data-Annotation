@@ -1,0 +1,3 @@
+/assays/*/*.tif
+/assays/*/*/*.tif
+/venv/
