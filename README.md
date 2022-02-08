@@ -3,4 +3,6 @@ A data management study file with a collection of experiments for microscopic da
 generated and tested by MRI using OMERO & FAIR principles
 
 
-# Description 
+# Description of The Project 
+
+
