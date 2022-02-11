@@ -1,10 +1,10 @@
 # Image Data Annotation
 A data management study file with a collection of experiments for microscopic data 
-generated and tested by MRI using OMERO & FAIR principles
+generated and tested by MRI using OMERO & FAIR principles.
 
 # Authors
 Quentin Szabo,  Axelle Donjon, Ivana Jerković , Giorgio L. Papadopoulos, Thierry Cheutin, Boyan Bonev , Elphège P. Nora , 
-                          Benoit G. Bruneau , Frédéric Bantignies , and Giacomo Cavalli
+                          Benoit G. Bruneau , Frédéric Bantignies , and Giacomo Cavalli.
 
 # Description of The Paper
 The genome folds into a hierarchy of three-dimensional structures within the nucleus. At the sub-megabase scale, chromosomes form topologically associating domains(TADs). However, how TADs fold in single cells is elusive. Here, we reveal TAD features inaccessible to cell population analysis by using super-resolution microscopy.TAD structures and physical insulation associated with their borders are variable between individual cells, yet chromatin intermingling is enriched withi
