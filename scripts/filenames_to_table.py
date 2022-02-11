@@ -22,5 +22,11 @@ for file_name in files_list:
         table = pd.concat([table, line], ignore_index=True)
 
 print(table)
+probes = pd.read_csv("probes.CSV")
+
+print(probes)
+table = pd.merge(table, probes, on="probe ID", how="left")
+print(table)
+
 
 
