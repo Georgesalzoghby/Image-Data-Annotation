@@ -1,5 +1,6 @@
 {
   "column_names": [
+    "image_name",
     "date",
     "refractive_index",
     "cell_line_name",
