@@ -1,0 +1,5 @@
+﻿cell_line_name,Characteristics [Organism],Term Source 1 REF,Term Source 1 Accession,Characteristics [Cell Line],Term Source 2 REF,Term Source 2 Accession,constract
+an identifier for the sample,the species of the sample e.g.Homo sapiens,NCBITaxon,leave blank,the name of the cell line used e.g HeLa (if appropriate)  Other Characteristics columns can be added as necessary e.g. Characteristics [Organism Part],EFO,# leave blank
+CTCF-AID,Mus Musculus,00000251,,E14tg2a,EFO,,CTCF-GFP-Tir1-TIGRE
+RAD21-AID,Mus Musculus,00000251,,E14tg2a,EFO,,RAD21-eGFP-Tir1-TIGRE
+ESC,Mus Musculus,00000251,,E14tg2a,EFO,,
