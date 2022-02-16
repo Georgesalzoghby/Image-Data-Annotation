@@ -1,0 +1,16 @@
+name: omero-data-annotation
+channels:
+  - ome
+  - anaconda
+  - conda-forge
+dependencies:
+  - python=3.9
+  - omero-py  # ome
+  - pip
+  - scikit-image
+  - pandas
+  - numpy
+  - pip:
+    - omero-rois
+    - omero-metadata
+    - argh
