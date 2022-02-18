@@ -25,7 +25,8 @@ for file_name in files_list:
 
 for col_name, table_file in MERGES.items():
     merge_table = pd.read_csv(os.path.join(".", "meta_data", table_file))
-    table = pd.merge(table, merge_table, left_on=col_name, right_on="on")
+    table = pd.merge(table, merge_table, left_on=col_name, right_on="on", how='left', suffixes=("_ch0" , "_ch1"))
+table = table.drop(columns = ["on_ch0", "on_ch1"])
 
 print(table)
 
