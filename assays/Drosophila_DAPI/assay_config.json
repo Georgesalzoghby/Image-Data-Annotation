@@ -1,0 +1,13 @@
+{
+  "column_names": [
+    "image_name",
+    "date",
+    "refractive_index",
+    "tissue",
+    "ch0",
+    "sir_tag",
+    "thresholded_tag",
+    "image_nr",
+    "extension"
+     ]
+}
