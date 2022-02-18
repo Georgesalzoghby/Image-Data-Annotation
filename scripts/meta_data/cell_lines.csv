@@ -1,4 +1,4 @@
-﻿on,Characteristics [Organism],Term Source 1 REF,Term Source 1 URL,Term Source 1 Accession,Characteristics [Cell Line],Term Source 2 REF,Term Source 2 URL,Term Source 2 Accession,constract
+﻿on,Characteristics [Organism],Term Source 1 REF,Term Source 1 URL,Term Source 1 Accession,Characteristics [Cell Line],Term Source 2 REF,Term Source 2 URL,Term Source 2 Accession,construct
 an identifier for the sample,the species of the sample e.g.Homo sapiens,NCBITaxon,,leave blank,the name of the cell line used e.g HeLa (if appropriate)  Other Characteristics columns can be added as necessary e.g. Characteristics [Organism Part],EFO,,# leave blank,
 CTCF-AID,Mus Musculus,10090,http://purl.obolibrary.org/obo/NCBITaxon_10090,,E14tg2a,EFO,http://www.ebi.ac.uk/efo/EFO_0006275,EFO_0006275,CTCF-GFP-Tir1-TIGRE
 RAD21-AID,Mus Musculus,10090,http://purl.obolibrary.org/obo/NCBITaxon_10090,,E14tg2a,EFO,http://www.ebi.ac.uk/efo/EFO_0006275,EFO_0006275,RAD21-eGFP-Tir1-TIGRE
