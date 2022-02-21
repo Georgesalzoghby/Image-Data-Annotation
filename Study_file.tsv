@@ -6,8 +6,8 @@
 Comment[IDR Study Accession]	# leave blank																																
 Study Title	         Regulation of single-cell genome organization into TADs and chromatin nanodomains																															
 Study Type	         Epigenetics
-Study Type Term Source REF	EFO																																
-Study Type Term Accession	EFO_0007550																																
+Study Type Term Source REF	# leave blank 																																
+Study Type Term Accession	# leave blank																																
 Study Description	 The genome folds into a hierarchy of three-dimensional structures within the nucleus.
                          At the sub-megabase scale, chromosomes form topologically associating domains (TADs)1–4. 
                          However, how TADs fold in single cells is elusive. Here, we reveal TAD features inaccessible to cell population 
@@ -21,11 +21,11 @@ Study Description	 The genome folds into a hierarchy of three-dimensional struct
 			 whereas disruption of nucleosome contacts alters their structural organization. 
                          Altogether, these results provide a physical basis for the folding of individual chromosomes at the nanoscale.																	
 Study Key Words	# fill in																												
-Study Organism	# if more than one organism was studied, enter them in separate columns;  Chromosome , 																															
+Study Organism	         Mus Musculus																															
 Study Organism Term Source REF	NCBITaxon																																
 Study Organism Term Accession	# leave blank																																
 Study Screens Number	# enter how many screens are in the study																																
-Study External URL	# if there is an existing web page related to the study enter it here																																
+Study External URL	 https://www.nature.com/articles/s41588-020-00716-8																															
 Study Public Release Date	# enter a date of when the data can be made public																																
 																																	
 # Study Publication																																	
@@ -34,7 +34,7 @@ Study Publication Title   Regulation of single-cell genome organization into TAD
 Study Author List	  Quentin Szabo,  Axelle Donjon, Ivana Jerković , Giorgio L. Papadopoulos, Thierry Cheutin, Boyan Bonev , Elphège P. Nora , 
                           Benoit G. Bruneau , Frédéric Bantignies , and Giacomo Cavalli 																																
 Study PMC ID	# fill in if known																																
-Study DOI	# fill in if known																																
+Study DOI	https://doi.org/10.1038/s41588-020-00716-8																																
 																																	
 # Study Contacts																																	
 Study Person Last Name	# fill in, you can add more people, each in their own column if you wish																																
