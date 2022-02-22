@@ -4,6 +4,7 @@
     "date",
     "refractive_index",
     "cell_line_name",
+    "Protocol_REF"
     "probe_ch0",
     "probe_ch1",
     "sir_tag",
