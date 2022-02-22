@@ -9,7 +9,7 @@ Study Type	         Epigenetics
 Study Type Term Source REF	# leave blank 																																
 Study Type Term Accession	# leave blank																																
 Study Description	 The genome folds into a hierarchy of three-dimensional structures within the nucleus.
-                         At the sub-megabase scale, chromosomes form topologically associating domains (TADs)1–4. 
+                         At the sub-megabase scale, chromosomes form topologically associating domains (TADs). 
                          However, how TADs fold in single cells is elusive. Here, we reveal TAD features inaccessible to cell population 
 			 analysis by using super-resolution microscopy.
 			 TAD structures and physical insulation associated with their borders are variable between individual cells, 
@@ -24,28 +24,28 @@ Study Key Words	# fill in
 Study Organism	         Mus Musculus																															
 Study Organism Term Source REF	NCBITaxon																																
 Study Organism Term Accession	# leave blank																																
-Study Screens Number	# enter how many screens are in the study																																
-Study External URL	 https://www.nature.com/articles/s41588-020-00716-8																															
-Study Public Release Date	# enter a date of when the data can be made public																																
+Study Screens Number	# enter how many screens are in the study	(zero)																															
+Study External URL	 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7610512/		##should ask about it 																													
+Study Public Release Date	19 October 2020																																
 																																	
 # Study Publication																																	
-Study PubMed ID	# fill in if known																																
+Study PubMed ID	          33077913																															
 Study Publication Title   Regulation of single-cell genome organization into TADs and chromatin nanodomains																																
 Study Author List	  Quentin Szabo,  Axelle Donjon, Ivana Jerković , Giorgio L. Papadopoulos, Thierry Cheutin, Boyan Bonev , Elphège P. Nora , 
                           Benoit G. Bruneau , Frédéric Bantignies , and Giacomo Cavalli 																																
-Study PMC ID	# fill in if known																																
-Study DOI	https://doi.org/10.1038/s41588-020-00716-8																																
+Study PMC ID	          PMC7610512																																
+Study DOI	          https://doi.org/10.1038/s41588-020-00716-8																																
 																																	
 # Study Contacts																																	
-Study Person Last Name	# fill in, you can add more people, each in their own column if you wish																																
-Study Person First Name	# fill in																																
-Study Person Email	# fill in																																
-Study Person Address	# fill in																																
-Study Person ORCID	# fill in																																
-Study Person Roles	submitter																																
+Study Person Last Name	  Bantignies and  Cavalli 																																
+Study Person First Name	  Frédéric   and  Giacomo																															
+Study Person Email	  frederic.bantignies@igh.cnrs.fr ; giacomo.cavalli@igh.cnrs.fr																																
+Study Person Address	  Institute of Human Genetics,  Centre National de la Recherche Scientifique, University of Montpellier, Montpellier, France.																																
+Study Person ORCID	  0000-0003-4063-7324 ; 0000-0003-3709-3469 																															
+Study Person Roles	  Corresponding authors 																																
 																																	
 # Study License and Data DOI																																	
-Study License	# fill in (CC BY 4.0 is the default licence, update this line to confirm)																																
+Study License	          CC by Springer Nature America, Inc. 2020																																
 Study License URL	# leave blank																																
 Study Copyright	# fill in																																
 Study Data Publisher	# leave blank																																
