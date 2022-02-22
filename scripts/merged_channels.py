@@ -2,8 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import tifffile
-import itertools
-from pandas import DataFrame as df
+
 INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID\\"
 files_list = os.listdir(INPUT_DIR)
 print(files_list[-1])
