@@ -1,4 +1,5 @@
 import os
+import re
 
 import pandas as pd
 from pandas import DataFrame as df
@@ -18,14 +19,20 @@ files_list = os.listdir(INPUT_DIR)
 table = df(columns=COLUMN_NAMES)
 
 for file_name in files_list:
-    if file_name.endswith(".tif"):
+    if file_name.endswith(".ome-tif"):
         line = [[file_name]+file_name.split(sep="_")]
+        line[0][-1] = line[0][-1].removesuffix(".ome-tif")
         line = df(line, columns=COLUMN_NAMES)
         table = pd.concat([table, line], ignore_index=True)
 
 for col_name, table_file in MERGES.items():
     merge_table = pd.read_csv(os.path.join(".", "meta_data", table_file))
-    table = pd.merge(table, merge_table, left_on=col_name, right_on="on", suffixes=("_ch0", "_ch1"), how='left')
-table = table.drop(columns=["on_ch0", "on_ch1"])
+    table = pd.merge(table, merge_table, left_on=col_name, right_on="on", how='left', suffixes=("_ch0", "_ch1"))
+table = table.drop(columns = ["on_ch0", "on_ch1"])
+
+if 'NPC' in INPUT_DIR:
+    table = table.drop(columns=["cluster_ESC_ch0", "cluster_ESC_ch1"])
+else:
+    table = table.drop(columns=["cluster_NPC_ch0", "cluster_NPC_ch1"])
 
 print(table)
