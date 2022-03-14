@@ -3,11 +3,13 @@
     "image_name",
     "date",
     "refractive_index",
-    "extended_tissue",
+    "tissue",
     "ch1",
     "sir_tag",
     "thresholded_tag",
     "image_nr",
     "extension"
-     ]
+     ],
+  "merges": {
+  }
 }

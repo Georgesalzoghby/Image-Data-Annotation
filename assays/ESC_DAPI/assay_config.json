@@ -12,5 +12,7 @@
     "thresholded_tag",
     "image_nr",
     "extension"
-     ]
+     ],
+  "merges": {
+  }
 }
