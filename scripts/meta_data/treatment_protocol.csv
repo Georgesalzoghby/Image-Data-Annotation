@@ -1,4 +1,6 @@
 ﻿on,growth Protocol REF,treatment Protocol REF
 ,growth protocol,treatment protocol
-AUX,with_AUX,with_AUX
-control,without_AUX,without_AUX
+AUX,,with_AUX
+AUX-CTL,,without_AUX
+TSA,,with_TSA
+TSA-CTL,,without_TSA
