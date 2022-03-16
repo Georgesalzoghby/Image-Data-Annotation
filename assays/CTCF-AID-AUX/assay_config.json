@@ -11,7 +11,8 @@
     "channel_nr",
     "aligned_tag",
     "thresholded_tag",
-    "image_nr"
+    "image_nr",
+    "extension"
      ],
 	"merges": {"probe_ch0": "probe_table.csv",
              "probe_ch1": "probe_table.csv",
