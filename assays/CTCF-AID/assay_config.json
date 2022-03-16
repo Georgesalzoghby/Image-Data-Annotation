@@ -1,6 +1,6 @@
 {
   "column_names": [
-    "image_name",
+    "Image Name",
     "date",
     "refractive_index",
     "cell_line_name",
@@ -12,7 +12,7 @@
     "aligned_tag",
     "thresholded_tag",
     "image_nr",
-    "extension"
+    "ch_number"
      ],
   "merges": {"probe_ch0": "probe_table.csv",
              "probe_ch1": "probe_table.csv",
