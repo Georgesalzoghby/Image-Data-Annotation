@@ -1,13 +1,13 @@
 import os
 import re
-
+import numpy as np
 import pandas as pd
 from pandas import DataFrame as df
 import json
 
 
-INPUT_DIR = input("input directory: ")
-#INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID"
+#INPUT_DIR = input("input directory: ")
+INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID"
 with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file:
     config = json.load(config_file)
 
@@ -19,9 +19,11 @@ files_list = os.listdir(INPUT_DIR)
 table = df(columns=COLUMN_NAMES)
 
 for file_name in files_list:
-    if file_name.endswith(".ome-tif"):
+    # if file_name.endswith(".ome-tif"):
+    if file_name.endswith(".tif"):
         line = [[file_name]+file_name.split(sep="_")]
-        line[0][-1] = line[0][-1].removesuffix(".ome-tif")
+        # line[0][-1] = line[0][-1].removesuffix(".ome-tif")
+        line[0][-1] = line[0][-1].removesuffix(".tif")
         line = df(line, columns=COLUMN_NAMES)
         table = pd.concat([table, line], ignore_index=True)
 
@@ -35,4 +37,12 @@ if 'NPC' in INPUT_DIR:
 else:
     table = table.drop(columns=["cluster_NPC_ch0", "cluster_NPC_ch1"])
 
-print(table)
+# print(table)
+table.to_csv(os.path.join(INPUT_DIR, 'table.csv'), index=False)
+
+
+print(list(table.dtypes))
+
+for dt in list(table.dtypes):
+    if isinstance(dt, np.object):
+        print('s')
