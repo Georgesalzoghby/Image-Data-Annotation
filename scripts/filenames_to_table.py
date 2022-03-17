@@ -1,3 +1,4 @@
+import numpy
 import os
 import re
 import numpy as np
@@ -44,5 +45,10 @@ table.to_csv(os.path.join(INPUT_DIR, 'table.csv'), index=False)
 print(list(table.dtypes))
 
 for dt in list(table.dtypes):
-    if isinstance(dt, np.object):
+    if dt == np.object:
         print('s')
+    elif dt == np.float64:
+        print('d')
+    else:
+        print('l')
+
