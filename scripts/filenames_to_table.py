@@ -6,7 +6,6 @@ import pandas as pd
 from pandas import DataFrame as df
 import json
 
-
 #INPUT_DIR = input("input directory: ")
 INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID"
 with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file:
@@ -31,24 +30,28 @@ for file_name in files_list:
 for col_name, table_file in MERGES.items():
     merge_table = pd.read_csv(os.path.join(".", "meta_data", table_file))
     table = pd.merge(table, merge_table, left_on=col_name, right_on="on", how='left', suffixes=("_ch0", "_ch1"))
-table = table.drop(columns = ["on_ch0", "on_ch1"])
+table = table.drop(columns=["on_ch0", "on_ch1"])
 
 if 'NPC' in INPUT_DIR:
     table = table.drop(columns=["cluster_ESC_ch0", "cluster_ESC_ch1"])
 else:
     table = table.drop(columns=["cluster_NPC_ch0", "cluster_NPC_ch1"])
 
-# print(table)
-table.to_csv(os.path.join(INPUT_DIR, 'table.csv'), index=False)
-
-
-print(list(table.dtypes))
-
+csv_header = "# header "
 for dt in list(table.dtypes):
-    if dt == np.object:
-        print('s')
+    if dt == np.int64:
+        csv_header = csv_header + 'l,'
     elif dt == np.float64:
-        print('d')
+        csv_header = csv_header + 'd,'
     else:
-        print('l')
+        csv_header = csv_header + 's,'
+print(csv_header[:-1])
+
+with open(os.path.join(INPUT_DIR, 'table.csv'), mode='w') as csv_file:
+    csv_file.write(csv_header[:-1])
+    csv_file.write("\n")
+    csv_file.write(table.to_csv(index=False, line_terminator='\n'))
+
+# print(table)
+# table.to_csv(os.path.join(INPUT_DIR, 'table.csv'), index=False)
 
