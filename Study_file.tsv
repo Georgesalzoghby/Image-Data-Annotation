@@ -60,7 +60,7 @@ Term Source File	http://purl.obolibrary.org/obo/	http://www.ebi.ac.uk/efo/	http:
 Experiment Number	            '1' ----> CTCF-AID																																
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -115,7 +115,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '2' ----> CTCF-AID-AUX																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -169,7 +169,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '3' ----> Drosophila_DAPI																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -224,7 +224,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '4' ----> Drosophila_TAD																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -278,7 +278,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '5' ----> ESC																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -332,7 +332,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '6' ----> ESC-CTL-TSA																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -386,7 +386,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '7' ----> ESC-TSA																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -440,7 +440,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '8' ----> ESC_DAPI																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -494,7 +494,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '8' ----> ncxNPC																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -548,7 +548,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '10' ----> NPC																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -602,7 +602,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '11' ----> RAD21-AID																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
@@ -656,7 +656,7 @@ Processed Data Column Link To Assay File	# enter which column can be used to lin
 Experiment Number	            '12' ----> RAD21-AID-AUX																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
-Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):	Total Tb: 	# fill in any values you know																													
+Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
