@@ -498,7 +498,7 @@ Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Tot
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
-Experiment Imaging Method Term Accession	# look up in http://www.ebi.ac.uk/ols/ontologies/fbbi or leave blank																																
+Experiment Imaging Method Term Accession	# look up in http://www.ebi.ac.uk/ols/ontologies/fbbi or leave blank	           UBERON_0001950																													
 Experiment Organism	            # fill in if different from Study Organism, if more than one organism was studied, enter them in separate columns																																
 Experiment Organism Term Source REF	       NCBITaxon																																
 Experiment Organism Term Accession	# leave blank																																
@@ -552,7 +552,7 @@ Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Tot
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
-Experiment Imaging Method Term Accession	# look up in http://www.ebi.ac.uk/ols/ontologies/fbbi or leave blank																																
+Experiment Imaging Method Term Accession	# look up in http://www.ebi.ac.uk/ols/ontologies/fbbi or leave blank		EFO_0004041																														
 Experiment Organism	            # fill in if different from Study Organism, if more than one organism was studied, enter them in separate columns																																
 Experiment Organism Term Source REF	       NCBITaxon																																
 Experiment Organism Term Accession	# leave blank																																
