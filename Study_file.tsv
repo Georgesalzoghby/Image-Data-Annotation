@@ -64,14 +64,14 @@ Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Tot
 Experiment Example Images	    # if you have a favourite image from the screen, list it here.  We may use this image to highlight your screen																																
 Experiment Imaging Method	    Structured Illumination Microscopy (SIM)																																	
 Experiment Imaging Method Term Source REF	Fbbi																																
-Experiment Imaging Method Term Accession	# look up in http://www.ebi.ac.uk/ols/ontologies/fbbi or leave blank	(EFO_000627)																														
-Experiment Organism	            # fill in if different from Study Organism, if more than one organism was studied, enter them in separate columns																																
-Experiment Organism Term Source REF	       NCBITaxon																																
+Experiment Imaging Method Term Accession	# look up in http://www.ebi.ac.uk/ols/ontologies/fbbi or leave blank	00000332																														
+Experiment Organism	            # fill in if different from Study Organism, if more than one organism was studied, enter them in separate columns	Mus musculus																															
+Experiment Organism Term Source REF	       NCBITaxon	10090																															
 Experiment Organism Term Accession	# leave blank																																
 Experiment Comments	            # if there is anything you would like to say about the experiment not covered elsewhere you can enter it here e.g. image X is missing, or an additional file is included																																
 																																	
 # assay files																																	
-Experiment Assay File	# put in the name of the assay file																																
+Experiment Assay File	# put in the name of the assay file   CTCF-AID	IDRname ? e.g idr#-experimentA-assay.txt																															
 Experiment Assay File Format	tab-delimited text																																
 Assay Experimental Conditions	# if there were any experimental conditions some cells were grown under as part of the study enter the information here e.g. different environmental stress conditions, or mutant background compared to wild type																																
 Assay Experimental Conditions Term Source REF	# leave blank																																
