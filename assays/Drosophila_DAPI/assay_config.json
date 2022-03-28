@@ -1,15 +1,23 @@
 {
   "column_names": [
-    "image_name",
-    "date",
-    "refractive_index",
-    "tissue",
-    "ch0",
-    "sir_tag",
-    "thresholded_tag",
-    "image_nr",
-    "extension"
+    "Image Name",
+    "Date",
+    "Refractive Index",
+    "cell Line Name",
+    "Protocol",
+    "Probe Ch0",
+    "Probe Ch1",
+    "Sir Tag",
+    "Channel nr",
+    "Aligned Tag",
+    "Thresholded Tag",
+    "Image Nr",
+    "Ch Number"
      ],
-  "merges": {
+  "merges": {"Probe Ch0": "probe_table.csv",
+             "Probe Ch1": "probe_table.csv",
+             "cell Line Name": "cell_lines.csv",
+             "Protocol": "treatment_protocol.csv"
+
   }
 }
