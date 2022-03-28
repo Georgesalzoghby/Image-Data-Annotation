@@ -1,8 +1,7 @@
-﻿on,growth Protocol REF,treatment Protocol REF
-,growth protocol,treatment protocol
+﻿on,"Growth Protocol ",Treatment Protocol
 AUX,,with_AUX
 AUX-CTL,,without_AUX
 TSA,,with_TSA
 TSA-CTL,,without_TSA
-ESC,
-NPC,
+ESC,,
+NPC,,
