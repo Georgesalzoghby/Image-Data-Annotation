@@ -1,4 +1,4 @@
-﻿on,chr,start,end,size_bp,n_oligos,density,primer_code,Primer_name_forward,Primer_sequence_forward,Primer_name_reverse,Primer_sequence_reverse,cluster_ESC,cluster_NPC
+﻿on,Chr,Start,End,Size bp,Nr Oligos,Density,Primer Code,Primer Name Forward,Primer Sequence Forward,Primer Name Reverse,Primer Sequence Reverse,Cluster ESC,Cluster NPC
 11,chr18,54000000,54990180,990180,13453,13.587,A,BB82-FWD,/5Phos/GTATCGTGCAAGGGTGAATGC,SecX-BB278-REV,/SecX/GAGCAGTCACAGTCCAGAAGG,repressed,active
 12,chr18,54995000,56335000,1340000,17829,13.306,B,BB81-FWD,/5Phos/ATCCTAGCCCATACGGCAATG,SecX-BB281-REV,/SecX/GGACATGGGTCAGGTAGGTTG,repressed,active
 21,chr8,42540000,43275000,735000,7664,10.428,C,BB287-FWD,/5Phos/CGCTCGGTCTCCGTTCGTCTC,SecX-BB288-REV,/SecX/GGGCTAGGTACAGGGTTCAGC,repressed,repressed
