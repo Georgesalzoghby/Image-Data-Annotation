@@ -53,5 +53,4 @@ with open(os.path.join(INPUT_DIR, 'table.csv'), mode='w') as csv_file:
     csv_file.write(table.to_csv(index=False, line_terminator='\n'))
 
 # print(table)
-# table.to_csv(os.path.join(INPUT_DIR, 'table.csv'), index=False)
-
+table.to_csv(os.path.join(INPUT_DIR, 'table.csv'), index=False)
