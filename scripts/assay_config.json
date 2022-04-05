@@ -8,10 +8,10 @@
     "Probe Ch0",
     "Probe Ch1",
     "Sir Tag",
-    "Channel nr",
+    "Channel Number",
     "Aligned Tag",
     "Thresholded Tag",
-    "Image Nr",
+    "Image Number",
     "Ch Number"
      ],
   "merges": {"Probe Ch0": "probe_table.csv",
