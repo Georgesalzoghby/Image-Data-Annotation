@@ -48,6 +48,8 @@ def run(assays_directory, image_files_extension, token_sep="_"):
             except KeyError:
                 pass
 
+            table.dropna(axis="columns", how="all", inplace=True)
+
             csv_header = "# header "
             for dt in list(table.dtypes):
                 if dt == np.int64:
