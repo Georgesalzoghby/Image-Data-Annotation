@@ -1,0 +1,3 @@
+# header s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s
+Image Name,Date,Refractive Index,Cell Line Name,Staining Ch0,Sir Tag,Thresholded Tag,Image Number,Ch Number,on,Characteristics [Organism],Term Source 1 REF,Term Source 1 URL,Term Source 1 Accession,Characteristics [Cell Line],Term Source 2 REF,Term Source 2 URL,Term Source 2 Accession,Construct,Tissue,Genotype
+20191115_RI5108_ESC_DAPI_SIR_THR_1_C1.tif,20191115,RI5108,ESC,DAPI,SIR,THR,1,C1,ESC,Mus musculus,10090,http://purl.obolibrary.org/obo/NCBITaxon_10090,,E14tg2a,EFO,http://www.ebi.ac.uk/efo/EFO_0006275,EFO_0006275,,,
