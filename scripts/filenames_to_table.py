@@ -37,13 +37,10 @@ def run(assays_directory, image_files_extension, token_sep="_"):
             for col_name, table_file in merges.items():
                 merge_table = pd.read_csv(os.path.join(".", "meta_data", table_file))
                 table = pd.merge(table, merge_table,
-                                 left_on=col_name,
-                                 right_on="on",
                                  how='left',
-                                 suffixes=(" Ch0", " Ch1")
+                                 on=col_name,
                                  )
             try:
-                table = table.drop(columns=["on Ch0", "on Ch1"])
                 if 'NPC' in assay_dir:
                     table = table.drop(columns=["Cluster ESC Ch0", "Cluster ESC Ch1"])
                 else:
