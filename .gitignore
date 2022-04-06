@@ -3,7 +3,7 @@
 /workspace.xml
 
 
-/assays/*/*.tif
-/assays/*/*/*.tif
+#/assays/*/*.tif
+#/assays/*/*/*.tif
 /venv/
 /.idea/
