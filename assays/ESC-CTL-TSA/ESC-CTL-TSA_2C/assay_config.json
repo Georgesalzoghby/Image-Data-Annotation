@@ -15,10 +15,9 @@
     "Image Number",
     "Ch Number"
      ],
-  "merges": {"Probe Ch0": "probe_table.csv",
-             "Probe Ch1": "probe_table.csv",
-             "Cell Line Name": "cell_lines.csv",
-             "Protocol": "treatment_protocol.csv"
-
+  "merges": {"Cell Line Name": "cell_lines.csv",
+             "Protocol": "treatment_protocol.csv",
+             "Probe Ch0": "probe_table_ch0.csv",
+             "Probe Ch1": "probe_table_ch1.csv"
   }
 }
