@@ -16,6 +16,6 @@
   ],
   "merges": {"Cell Line Name": "cell_lines.csv",
              "Probe Ch0": "probe_table_ch0.csv",
-             "Probe Ch1": "probe_table_ch0.csv"
+             "Probe Ch1": "probe_table_ch1.csv"
   }
 }
