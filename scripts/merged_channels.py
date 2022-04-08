@@ -11,6 +11,8 @@ if not os.path.exists(OUTPUT_DIR):
 files_list = sorted(os.listdir(INPUT_DIR))
 print(files_list[-1])
 
+# TODO: This line is extracting the metadata into a file
+# ./bftools/showinf -nopix -nocore -omexml ./Image/701139/Binary/20190720_RI512_ES-CTL_61b-647_61a-565_DAPI_001_SIR.dv > metadata.xml
 
 for i in range(0, len(files_list)-1, NUMBER_CHANNELS):
     n0 = tifffile.imread(os.path.join(INPUT_DIR, files_list[i]))
