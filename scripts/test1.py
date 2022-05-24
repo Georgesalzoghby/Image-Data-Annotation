@@ -8,6 +8,9 @@ from skimage.measure import label, regionprops_table, marching_cubes
 from skimage.segmentation import clear_border
 
 Input = 'C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged'
+output_properties = ('label', 'area', 'area_filled', 'axis_major_length', 'axis_minor_length', 'centroid',
+                     'centroid_weighted', 'eccentricity', 'equivalent_diameter_area', 'intensity_max', 'intensity_mean',
+                     'intensity_min', 'solidity')
 Output = Input + '_matpython'
 if not os.path.isdir(Output):
     os.makedirs(Output)
@@ -26,7 +29,8 @@ for channel_raw in img_raw:  #this order (starting by channel number) is not def
     channel_labels = clear_border(channel_labels)
     channel_properties_dict = regionprops_table(label_image=channel_labels,
                                                 intensity_image=channel_raw,
-                                                properties=('label',))
+                                                properties=output_properties)
+
     table = pd.DataFrame(channel_properties_dict)
     print(table)
  # for prop in img_region:
