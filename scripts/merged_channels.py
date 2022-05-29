@@ -1,13 +1,18 @@
 import os
 import json
 import numpy as np
-# import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ET
 import tifffile
 import xtiff
 from getpass import getpass
 from omero.gateway import BlitzGateway
-
+import javabridge
+import bioformats
 from meta_data.crop_to_raw import crop_to_raw, crop_to_SIR
+
+javabridge.start_vm(class_path=bioformats.JARS)
+
+# TODO: check here: https://forum.image.sc/t/python-bioformats-write-image-6d-images-series-handling/28633/4
 
 CHANNEL_NAME_MAPPINGS = {'683.0': 'Alexa-647', '608.0': 'ATTO-555', '435.0': 'DAPI'}
 
@@ -23,15 +28,6 @@ nr_channels = config["nr_channels"]
 files_set = {f[:-7] for f in os.listdir(INPUT_DIR) if f.endswith('.tif')}
 
 try:
-    # image = tifffile.TiffFile('scripts/20200726_RI512_RAD21-AID-AUX_61b-647_61a-565_DAPI_001_SIR.dv.ome.tif')
-    # root = ET.fromstring(image.ome_metadata)
-    # for channel in root.iter('{http://www.openmicroscopy.org/Schemas/OME/2016-06}Channel'):
-    #     channel.set('Name', channel_name_mapping[channel.get('Name')])
-    # for channel in root.iter('{http://www.openmicroscopy.org/Schemas/OME/2016-06}Pixels'):
-    #     channel.set('SizeX', 55)
-    # for channel in root.iter('{http://www.openmicroscopy.org/Schemas/OME/2016-06}Pixels'):
-    #     channel.set('SizeY', 55)
-
     conn = BlitzGateway(username=input("username: "),
                         passwd=getpass("password: "),
                         host="omero.mri.cnrs.fr",
@@ -55,9 +51,27 @@ try:
 
         raw_image_id = crop_to_raw["_".join(file_root.split("_")[:-1])]
         sir_image_id = crop_to_SIR["_".join(file_root.split("_")[:-1])]
-
         raw_image = conn.getObject('Image', raw_image_id)
         sir_image = conn.getObject('Image', sir_image_id)
+
+        raw_image_name = raw_image.getName()
+        omexml = bioformats.OMEXML(bioformats.get_omexml_metadata(f"scripts/raw_files/{raw_image_name}"))
+
+        # Remove time from acquisition
+        omexml.Image().AcquisitionDate = omexml.Image().AcquisitionDate.split('T')[0]
+
+        # Remove deteted DAPI
+        if nr_channels < omexml.image().Pixels.channel_count:
+            # We check if it is DAPI before removal
+            if
+
+
+        for channel in ome_xml_root.iter('{http://www.openmicroscopy.org/Schemas/OME/2016-06}Channel'):
+            channel.set('Name', CHANNEL_NAME_MAPPINGS[channel.get('Name')])
+        for channel in ome_xml_root.iter('{http://www.openmicroscopy.org/Schemas/OME/2016-06}Pixels'):
+            channel.set('SizeX', 55)
+        for channel in ome_xml_root.iter('{http://www.openmicroscopy.org/Schemas/OME/2016-06}Pixels'):
+            channel.set('SizeY', 55)
 
         options = dict(photometric='minisblack', metadata={'axes': 'CZYX'})
 
@@ -74,3 +88,5 @@ try:
 
 finally:
     conn.close()
+
+    javabridge.kill_vm()
