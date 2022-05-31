@@ -7,3 +7,4 @@
 #/assays/*/*/*.tif
 /venv/
 /.idea/
+/assays/CTCF-AID_merged/
