@@ -2,10 +2,12 @@ name: omero-data-annotation
 channels:
   - ome
   - anaconda
+  - bioconda
   - conda-forge
 dependencies:
   - python=3.8
   - omero-py  # ome
+  - python-bioformats
   - pip
   - scikit-image
   - pandas
