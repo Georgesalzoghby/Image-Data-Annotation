@@ -1,49 +1,80 @@
+import json
 import os
 import numpy as np
+import pandas
 import pandas as pd
 from tifffile import imread, imsave, imshow
 from skimage.filters import gaussian, threshold_otsu
 from skimage.measure import label, regionprops_table, regionprops
 from skimage.segmentation import clear_border
-from sklearn.metrics import jaccard_score
+# from sklearn.metrics import jaccard_score
 
-input_dir = 'C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged'
-output_dir = input_dir + '_matpython'
-output_properties = ('label', 'area', 'filled_area', 'major_axis_length', 'minor_axis_length', 'centroid',
-                     'weighted_centroid', 'equivalent_diameter', 'max_intensity', 'mean_intensity',
-                     'min_intensity', 'coords')
-if not os.path.isdir(output_dir):
-    os.makedirs(output_dir)
+INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_merged'
+OUTPUT_DIR = INPUT_DIR + '_analysis'
+roi_properties = ('label', 'area', 'filled_area',
+                  # 'major_axis_length', 'minor_axis_length',
+                  'centroid',
+                  'weighted_centroid', 'equivalent_diameter', 'max_intensity', 'mean_intensity',
+                  'min_intensity', 'coords')
+overlap_properties = ('label', 'area', 'filled_area', 'centroid',
+                      'coords')
+if not os.path.isdir(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
 
-min_volume = 200  # Minimum volume for the regions
+MIN_VOLUME = 200  # Minimum volume for the regions
+
+
 def filter_small_regions(labels, min_volume):
     for region in regionprops(labels):
         # take regions with large enough areas
         if region.area < min_volume:
+            print('kicked out!!')
             labels[region.coords] = 0
     return labels
-# with open(os.path.join(Input, 'img_original.tif'),mode='r') as img_original:
-#     img_original = imread("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_1.ome-tif")
-
-img_raw = imread("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_1.ome-tif")
-img_labels = np.zeros_like(img_raw, dtype='int32')
 
 
-for channel_index, channel_raw in enumerate(img_raw):  #this order (starting by channel number) is not defined by default
-    channel_filtered = gaussian(channel_raw, sigma=0.5)
-    channel_thresholded = channel_filtered > threshold_otsu(channel_filtered)
-    # imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_thre_1.ome-tif", channel_thresholded)
-    img_labels[channel_index] = label(channel_thresholded)
-    img_labels[channel_index] = clear_border(img_labels[channel_index])
-    img_labels[channel_index] = filter_small_regions(img_labels[channel_index], min_volume=min_volume)
-    channel_properties_dict = regionprops_table(label_image= img_labels[channel_index],
-                                                intensity_image=channel_raw,
-                                                properties=output_properties)
+with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file:
+    config = json.load(config_file)
 
-    table = pd.DataFrame(channel_properties_dict)
-    print(table)
-    imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_labels_1.ome-tif", img_labels)
-    print(img_labels.shape)
+nr_channels = config["nr_channels"]
+files_list = [f for f in os.listdir(INPUT_DIR) if f.endswith('.tiff')]
+
+analysis_df = pd.DataFrame()
+
+for img_file in files_list:
+
+    img_raw = imread(os.path.join(INPUT_DIR, img_file))
+
+    img_raw = img_raw.transpose((1, 0, 2, 3)).copy()
+
+    img_labels = np.zeros_like(img_raw, dtype='int32')
+    img_df = pandas.DataFrame()
+
+    for channel_index, channel_raw in enumerate(img_raw):  #this order (starting by channel number) is not defined by default
+        channel_filtered = gaussian(channel_raw, sigma=0.5, preserve_range=True).astype('uint16')
+        channel_thresholded = channel_filtered > threshold_otsu(channel_filtered)
+        img_labels[channel_index] = label(channel_thresholded)
+        img_labels[channel_index] = clear_border(img_labels[channel_index])
+        img_labels[channel_index] = filter_small_regions(img_labels[channel_index], min_volume=MIN_VOLUME)
+        channel_properties_dict = regionprops_table(label_image=img_labels[channel_index],
+                                                    intensity_image=channel_raw,
+                                                    properties=roi_properties)
+        channel_table = pd.DataFrame(channel_properties_dict)
+        channel_table.insert(loc=0, column='Image Name', value=img_file)
+        channel_table.insert(loc=1, column='Channel ID', value=channel_index)
+
+        img_df = pd.concat([img_df, channel_table])
+
+    overlap_img = np.all(img_labels, axis=0)
+    overlap_labels = label(overlap_img)
+    overlap_properties_dict = regionprops_table(label_image=overlap_labels,
+                                                properties=overlap_properties)
+
+    analysis_df = pd.concat([analysis_df, img_df])
+
+print(analysis_df)
+        # imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_labels_1.ome-tif", img_labels)
+        # print(img_labels.shape)
 
  # for prop in img_region:
  #     print('Label: {} >> Object size: {}'.format(prop.label, prop.area))
