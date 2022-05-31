@@ -1,0 +1,77 @@
+
+OMX version:  3.70.9622.0
+OMX system :  Montpellier
+Image file:   X:/Quentin/20190720_4/20190720_RI512_ES-CTL_61b-647_61a-565_DAPI_001.dv
+Created:      Sun Jul 21 1:44:43 2019
+
+Optics:
+  drawer:      = BGR
+  objective:   = 100X
+  lens ID:     = null
+  light path:  = SI
+
+  Time-lapse on:             No
+
+Image Properties:
+  XY pixels:                 512 x 512
+  ZWT dimensions (expected): 57 x 3 x 1
+  angles:                    3
+  nphases:                   5
+  pixel size (um):           0.08 0.08 0.125
+  binning:                   1 x 1
+
+Experiment: 
+  type:                      SI
+  title:                     null
+  type of imaging:           Sequential
+  acquisition order:         All Channel then Z
+  focus point at start:      middle
+
+  Section spacing:           0.125
+  Number of sections:        57
+  Sample thickness:          7.000
+
+  Point Visit:               all
+
+Number of Channels:   3
+
+  channel       = Cy5
+  camera        = Camera 4
+  type          = 2
+  temperature   = -80 C
+  mode          = EMCCD 5MHz
+  EMCCD gain    = 100
+  gain          = 1
+  exposure      = 50
+  excitation    = 642
+  %T            = 1.0%
+  biasEM5MHz    = 400
+
+  channel       = A568
+  camera        = Camera 3
+  type          = 2
+  temperature   = -80 C
+  mode          = EMCCD 5MHz
+  EMCCD gain    = 20
+  gain          = 1
+  exposure      = 40
+  excitation    = 568
+  %T            = 10.0%
+  biasEM5MHz    = 400
+
+  channel       = DAPI
+  camera        = Camera 1
+  type          = 2
+  temperature   = -80 C
+  mode          = EMCCD 5MHz
+  EMCCD gain    = 120
+  gain          = 1
+  exposure      = 20
+  excitation    = 405
+  %T            = 10.0%
+  biasEM5MHz    = 400
+
+-------------------------------------------------------
+
+---------- Experiment Record --------------------------
+
