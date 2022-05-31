@@ -143,11 +143,10 @@ try:
         raw_image_name = raw_image.getName()
         raw_channels = raw_image.getChannels()
 
-        # # Remove deteted DAPI
-        # if nr_channels < omexml.image().Pixels.channel_count:
-        #     pass
-        #     # We check if it is DAPI before removal
-        #     # if
+        # Remove deteted DAPI
+        if nr_channels < raw_image.getSizeC():
+            if raw_channels[-1].getEmissionWave() != 435.0:
+                raise Exception('The last wavelength is not DAPI')
 
         channel_names = [CHANNEL_NAME_MAPPINGS[str(raw_image.getChannelLabels()[c])] for c in range(nr_channels)]
 
