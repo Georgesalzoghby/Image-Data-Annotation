@@ -1,7 +1,14 @@
-import numpy as np
-
 from typing import Optional, Sequence
 from xml.etree import ElementTree
+
+import os
+import json
+import numpy as np
+import tifffile
+import xtiff
+from getpass import getpass
+from omero.gateway import BlitzGateway
+from meta_data.crop_to_raw import crop_to_raw, crop_to_SIR
 
 OME_TYPES = {
     np.bool_().dtype: 'bool',
@@ -14,15 +21,6 @@ OME_TYPES = {
     np.float32().dtype: 'float',
     np.float64().dtype: 'double',
 }
-
-import os
-import json
-import numpy as np
-import tifffile
-import xtiff
-from getpass import getpass
-from omero.gateway import BlitzGateway
-from meta_data.crop_to_raw import crop_to_raw, crop_to_SIR
 
 
 # The "interleaved" argument was added in version 0.7.2. To not introduce breaking changes, it is a keyword-only
@@ -104,12 +102,11 @@ def get_ome_xml(img: np.ndarray, image_name: Optional[str], channel_names: Optio
     return ElementTree.ElementTree(element=ome_element)
 
 
-# TODO: check here: https://forum.image.sc/t/python-bioformats-write-image-6d-images-series-handling/28633/4
-
+# sourcery skip: merge-nested-ifs, raise-specific-error, use-fstring-for-concatenation
 CHANNEL_NAME_MAPPINGS = {'683.0': 'Alexa-647', '608.0': 'ATTO-555', '435.0': 'DAPI'}
 
 INPUT_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID"
-OUTPUT_DIR = INPUT_DIR + '_merged'
+OUTPUT_DIR = f'{INPUT_DIR}_merged'
 if not os.path.exists(OUTPUT_DIR):
     os.mkdir(OUTPUT_DIR)
 
@@ -144,6 +141,7 @@ try:
         sir_image = conn.getObject('Image', sir_image_id)
 
         raw_image_name = raw_image.getName()
+        raw_channels = raw_image.getChannels()
 
         # # Remove deteted DAPI
         # if nr_channels < omexml.image().Pixels.channel_count:
@@ -153,9 +151,8 @@ try:
 
         channel_names = [CHANNEL_NAME_MAPPINGS[str(raw_image.getChannelLabels()[c])] for c in range(nr_channels)]
 
-        channels = raw_image.getChannels()
-        excitation_wavelengths = [ch.getExcitationWave() for ch in channels[:nr_channels]]
-        emission_wavelengths = [ch.getEmissionWave() for ch in channels[:nr_channels]]
+        excitation_wavelengths = [ch.getExcitationWave() for ch in raw_channels[:nr_channels]]
+        emission_wavelengths = [ch.getEmissionWave() for ch in raw_channels[:nr_channels]]
 
         metadata = {
                     # 'axes': 'CZYX',
