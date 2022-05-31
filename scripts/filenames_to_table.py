@@ -25,7 +25,7 @@ def run(assays_directory, image_files_extension, token_sep="_"):
             column_names = config["column_names"]
             merges = config["merges"]
 
-            files_list = os.listdir(assay_dir)
+            files_list = [f for f in os.listdir(assay_dir) if f.endswith(image_files_extension)]
             table = df(columns=column_names)
 
             for file_name in files_list:
