@@ -3,8 +3,8 @@
 /workspace.xml
 
 
-#/assays/*/*.tif
-#/assays/*/*/*.tif
+/assays/*/*.tif
+/assays/*/*/*.tif
 /venv/
 /.idea/
 /assays/CTCF-AID_merged/
