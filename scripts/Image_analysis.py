@@ -7,6 +7,7 @@ from tifffile import imread, imsave, imshow
 from skimage.filters import gaussian, threshold_otsu
 from skimage.measure import label, regionprops_table, regionprops
 from skimage.segmentation import clear_border
+from skimage.morphology import remove_small_objects
 # from sklearn.metrics import jaccard_score
 
 INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_merged'
@@ -22,16 +23,6 @@ if not os.path.isdir(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
 MIN_VOLUME = 200  # Minimum volume for the regions
-
-
-def filter_small_regions(labels, min_volume):
-    for region in regionprops(labels):
-        # take regions with large enough areas
-        if region.area < min_volume:
-            print('kicked out!!')
-            labels[region.coords] = 0
-    return labels
-
 
 with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file:
     config = json.load(config_file)
@@ -55,7 +46,7 @@ for img_file in files_list:
         channel_thresholded = channel_filtered > threshold_otsu(channel_filtered)
         img_labels[channel_index] = label(channel_thresholded)
         img_labels[channel_index] = clear_border(img_labels[channel_index])
-        img_labels[channel_index] = filter_small_regions(img_labels[channel_index], min_volume=MIN_VOLUME)
+        img_labels[channel_index] = remove_small_objects(img_labels[channel_index], min_size=MIN_VOLUME)
         channel_properties_dict = regionprops_table(label_image=img_labels[channel_index],
                                                     intensity_image=channel_raw,
                                                     properties=roi_properties)
