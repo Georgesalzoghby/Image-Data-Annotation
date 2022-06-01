@@ -1,5 +1,7 @@
 import json
 import os
+from math import sqrt
+
 import numpy as np
 import pandas as pd
 import xtiff
@@ -46,6 +48,7 @@ def process_channel(channel, properties, sigma=None, min_volume=None, binarize=T
                                         properties=properties)
     properties_table = pd.DataFrame(properties_dict)
 
+
     return labels, properties_table
 
 
@@ -67,18 +70,21 @@ for img_file in files_list:
 
     img_labels = np.zeros_like(img_raw, dtype='uint8')
 
-    for channel_index, channel_raw in enumerate(
-            img_raw):  # this order (starting by channel number) is not defined by default
+    image_df = pd.DataFrame.from_dict({'Image Name': [img_file]})
+
+    for channel_index, channel_raw in \
+            enumerate(img_raw):  # this order (starting by channel number) is not defined by default
         channel_labels, channel_properties_table = process_channel(channel_raw, ROI_PROPERTIES,
                                                                    sigma=SIGMA, min_volume=MIN_VOLUME)
 
         img_labels[channel_index] = channel_labels
 
-        channel_properties_table.insert(loc=0, column='Image Name', value=img_file)
-        channel_properties_table.insert(loc=1, column='Channel ID', value=channel_index)
-        channel_properties_table['Channel ID'] = channel_properties_table['Channel ID'].astype('Int8')
+        channel_properties_table['volume'] = channel_properties_table['filled_area'].apply(lambda a: a * VOXEL_VOLUME)
+        channel_properties_table['volume_units'] = 'micron^3'
+        channel_properties_table = channel_properties_table.add_prefix(f"ch-{channel_index}_")
 
-        analysis_df = pd.concat([analysis_df, channel_properties_table], ignore_index=True)
+        channel_properties_table.insert(loc=0, column='Image Name', value=img_file)
+        image_df = pd.merge(image_df, channel_properties_table, on='Image Name', how='outer')
 
     xtiff.to_tiff(img=img_labels.transpose((1, 0, 2, 3)),
                   file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_channel-linked-ROIs.ome.tiff')
@@ -93,15 +99,25 @@ for img_file in files_list:
     overlap_properties_dict = regionprops_table(label_image=overlap_labels,
                                                 properties=OVERLAP_PROPERTIES)
     overlap_properties_table = pd.DataFrame(overlap_properties_dict)
+    overlap_properties_table['volume'] = overlap_properties_table['filled_area'].apply(lambda a: a * VOXEL_VOLUME)
+    overlap_properties_table['volume_units'] = 'micron^3'
+
+    overlap_properties_table = overlap_properties_table.add_prefix("overlap_")
     overlap_properties_table.insert(loc=0, column='Image Name', value=img_file)
 
-    analysis_df = pd.concat([analysis_df, overlap_properties_table], ignore_index=True)
+    image_df = pd.merge(image_df, overlap_properties_table, on='Image Name')
     # analysis_df['Channel ID'] = analysis_df['Channel ID'].astype('Int64')
+    analysis_df = pd.concat([analysis_df, image_df], ignore_index=True)
 
-# Some additional measurements
-analysis_df['volume'] = analysis_df['area_filled'].apply(lambda a: a * VOXEL_VOLUME)
-analysis_df['volume_units'] = 'micron^3'
-
+## Some additional measurements
+# Distance
+try:
+    analysis_df.distance_x = analysis_df.apply(lambda x: abs(x["ch-0_weighted_centroid-2"] - x["ch-1_weighted_centroid-2"]))
+    analysis_df.distance_y = analysis_df.apply(lambda x: abs(x["ch-0_weighted_centroid-1"] - x["ch-1_weighted_centroid-1"]))
+    analysis_df.distance_z = analysis_df.apply(lambda x: abs(x["ch-0_weighted_centroid-0"] - x["ch-1_weighted_centroid-0"]))
+    analysis_df.distance3d = analysis_df.apply(lambda x: sqrt(x.distance_x ** 2 + x.distance_y ** 2 + x.distance_z ** 2))
+except KeyError:
+    pass
 
 analysis_df.to_csv(os.path.join(OUTPUT_DIR, 'analysis_df.csv'))
 
