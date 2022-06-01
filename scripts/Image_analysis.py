@@ -27,6 +27,7 @@ OVERLAP_PROPERTIES = ('label', 'area', 'filled_area', 'centroid',
 # Analysis constants
 MIN_VOLUME = 200  # Minimum volume for the regions
 SIGMA = 0.5
+VOXEL_VOLUME = 0.04 * 0.04 * 0.125
 
 
 # Function definitions
@@ -96,6 +97,10 @@ for img_file in files_list:
 
     analysis_df = pd.concat([analysis_df, overlap_properties_table], ignore_index=True)
     # analysis_df['Channel ID'] = analysis_df['Channel ID'].astype('Int64')
+
+# Some additional measurements
+analysis_df['volume'] = analysis_df['area_filled'].apply(lambda a: a * VOXEL_VOLUME)
+analysis_df['volume_units'] = 'micron^3'
 
 
 analysis_df.to_csv(os.path.join(OUTPUT_DIR, 'analysis_df.csv'))
