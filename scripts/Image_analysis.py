@@ -1,8 +1,8 @@
 import json
 import os
 import numpy as np
-import pandas
 import pandas as pd
+import xtiff
 from tifffile import imread, imsave, imshow
 from skimage.filters import gaussian, threshold_otsu
 from skimage.measure import label, regionprops_table
@@ -75,15 +75,29 @@ for img_file in files_list:
 
         channel_properties_table.insert(loc=0, column='Image Name', value=img_file)
         channel_properties_table.insert(loc=1, column='Channel ID', value=channel_index)
+        channel_properties_table['Channel ID'] = channel_properties_table['Channel ID'].astype('Int8')
 
-        analysis_df = pd.concat([analysis_df, channel_properties_table])
+        analysis_df = pd.concat([analysis_df, channel_properties_table], ignore_index=True)
+
+    xtiff.to_tiff(img=img_labels.transpose((1, 0, 2, 3)),
+                  file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_channel-linked-ROIs.ome.tiff')
+                  )
 
     overlap_img = np.all(img_labels, axis=0)
+    xtiff.to_tiff(img=np.expand_dims(overlap_img, axis=1),
+                  file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_unlinked-ROIs.ome.tiff')
+                  )
+
     overlap_labels = label(overlap_img)
     overlap_properties_dict = regionprops_table(label_image=overlap_labels,
                                                 properties=OVERLAP_PROPERTIES)
+    overlap_properties_table = pd.DataFrame(overlap_properties_dict)
+    overlap_properties_table.insert(loc=0, column='Image Name', value=img_file)
 
-analysis_df.reset_index(drop=True, inplace=True)
+    analysis_df = pd.concat([analysis_df, overlap_properties_table], ignore_index=True)
+    # analysis_df['Channel ID'] = analysis_df['Channel ID'].astype('Int64')
+
+
 analysis_df.to_csv(os.path.join(OUTPUT_DIR, 'analysis_df.csv'))
 
 # imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_labels_1.ome-tif", img_labels)
