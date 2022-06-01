@@ -30,14 +30,17 @@ SIGMA = 0.5
 
 
 # Function definitions
-def process_channel(channel, properties, sigma=None, min_volume=None):
+def process_channel(channel, properties, sigma=None, min_volume=None, binarize=True):
     if sigma is not None:
         channel = gaussian(channel, sigma=sigma, preserve_range=True).astype('uint16')
     thresholded = channel > threshold_otsu(channel)
     labels = label(thresholded)
     labels = clear_border(labels)
     if min_volume is not None:
-        labels = remove_small_objects(labels, min_size=min_volume)
+        labels = remove_small_objects(labels, connectivity=labels.ndim, min_size=min_volume)
+    if binarize:
+        labels = labels > 0
+        labels = labels.astype('uint8')
     properties_dict = regionprops_table(label_image=labels, intensity_image=channel,
                                         properties=properties)
     properties_table = pd.DataFrame(properties_dict)
@@ -61,7 +64,7 @@ for img_file in files_list:
     img_raw = imread(os.path.join(INPUT_DIR, img_file))
     img_raw = img_raw.transpose((1, 0, 2, 3))
 
-    img_labels = np.zeros_like(img_raw, dtype='int32')
+    img_labels = np.zeros_like(img_raw, dtype='uint8')
 
     for channel_index, channel_raw in enumerate(
             img_raw):  # this order (starting by channel number) is not defined by default
