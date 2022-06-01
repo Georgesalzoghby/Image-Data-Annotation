@@ -5,24 +5,48 @@ import pandas
 import pandas as pd
 from tifffile import imread, imsave, imshow
 from skimage.filters import gaussian, threshold_otsu
-from skimage.measure import label, regionprops_table, regionprops
+from skimage.measure import label, regionprops_table
 from skimage.segmentation import clear_border
 from skimage.morphology import remove_small_objects
+
 # from sklearn.metrics import jaccard_score
 
+# Input and output directories
 INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_merged'
-OUTPUT_DIR = INPUT_DIR + '_analysis'
-roi_properties = ('label', 'area', 'filled_area',
+OUTPUT_DIR = f'{INPUT_DIR}_analysis'
+
+# Properties to measure
+ROI_PROPERTIES = ('label', 'area', 'filled_area',
                   # 'major_axis_length', 'minor_axis_length',
                   'centroid',
                   'weighted_centroid', 'equivalent_diameter', 'max_intensity', 'mean_intensity',
                   'min_intensity', 'coords')
-overlap_properties = ('label', 'area', 'filled_area', 'centroid',
+OVERLAP_PROPERTIES = ('label', 'area', 'filled_area', 'centroid',
                       'coords')
+
+# Analysis constants
+MIN_VOLUME = 200  # Minimum volume for the regions
+SIGMA = 0.5
+
+
+# Function definitions
+def process_channel(channel, properties, sigma=None, min_volume=None):
+    if sigma is not None:
+        channel = gaussian(channel, sigma=sigma, preserve_range=True).astype('uint16')
+    thresholded = channel > threshold_otsu(channel)
+    labels = label(thresholded)
+    labels = clear_border(labels)
+    if min_volume is not None:
+        labels = remove_small_objects(labels, min_size=min_volume)
+    properties_dict = regionprops_table(label_image=labels, intensity_image=channel,
+                                        properties=properties)
+    properties_table = pd.DataFrame(properties_dict)
+
+    return labels, properties_table
+
+
 if not os.path.isdir(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
-
-MIN_VOLUME = 200  # Minimum volume for the regions
 
 with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file:
     config = json.load(config_file)
@@ -35,43 +59,37 @@ analysis_df = pd.DataFrame()
 for img_file in files_list:
 
     img_raw = imread(os.path.join(INPUT_DIR, img_file))
-
-    img_raw = img_raw.transpose((1, 0, 2, 3)).copy()
+    img_raw = img_raw.transpose((1, 0, 2, 3))
 
     img_labels = np.zeros_like(img_raw, dtype='int32')
     img_df = pandas.DataFrame()
 
-    for channel_index, channel_raw in enumerate(img_raw):  #this order (starting by channel number) is not defined by default
-        channel_filtered = gaussian(channel_raw, sigma=0.5, preserve_range=True).astype('uint16')
-        channel_thresholded = channel_filtered > threshold_otsu(channel_filtered)
-        img_labels[channel_index] = label(channel_thresholded)
-        img_labels[channel_index] = clear_border(img_labels[channel_index])
-        img_labels[channel_index] = remove_small_objects(img_labels[channel_index], min_size=MIN_VOLUME)
-        channel_properties_dict = regionprops_table(label_image=img_labels[channel_index],
-                                                    intensity_image=channel_raw,
-                                                    properties=roi_properties)
-        channel_table = pd.DataFrame(channel_properties_dict)
-        channel_table.insert(loc=0, column='Image Name', value=img_file)
-        channel_table.insert(loc=1, column='Channel ID', value=channel_index)
+    for channel_index, channel_raw in enumerate(
+            img_raw):  # this order (starting by channel number) is not defined by default
+        channel_labels, channel_properties_table = process_channel(channel_raw, ROI_PROPERTIES,
+                                                                   sigma=SIGMA, min_volume=MIN_VOLUME)
 
-        img_df = pd.concat([img_df, channel_table])
+        img_labels[channel_index] = channel_labels
+
+        channel_properties_table.insert(loc=0, column='Image Name', value=img_file)
+        channel_properties_table.insert(loc=1, column='Channel ID', value=channel_index)
+
+        img_df = pd.concat([img_df, channel_properties_table])
 
     overlap_img = np.all(img_labels, axis=0)
     overlap_labels = label(overlap_img)
     overlap_properties_dict = regionprops_table(label_image=overlap_labels,
-                                                properties=overlap_properties)
+                                                properties=OVERLAP_PROPERTIES)
 
     analysis_df = pd.concat([analysis_df, img_df])
 
 print(analysis_df)
-        # imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_labels_1.ome-tif", img_labels)
-        # print(img_labels.shape)
+# imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_labels_1.ome-tif", img_labels)
+# print(img_labels.shape)
 
- # for prop in img_region:
- #     print('Label: {} >> Object size: {}'.format(prop.label, prop.area))
- # img_region = np.array(regionprops(img_labeled))
-
-
+# for prop in img_region:
+#     print('Label: {} >> Object size: {}'.format(prop.label, prop.area))
+# img_region = np.array(regionprops(img_labeled))
 
 
 #
