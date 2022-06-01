@@ -62,7 +62,6 @@ for img_file in files_list:
     img_raw = img_raw.transpose((1, 0, 2, 3))
 
     img_labels = np.zeros_like(img_raw, dtype='int32')
-    img_df = pandas.DataFrame()
 
     for channel_index, channel_raw in enumerate(
             img_raw):  # this order (starting by channel number) is not defined by default
@@ -74,15 +73,14 @@ for img_file in files_list:
         channel_properties_table.insert(loc=0, column='Image Name', value=img_file)
         channel_properties_table.insert(loc=1, column='Channel ID', value=channel_index)
 
-        img_df = pd.concat([img_df, channel_properties_table])
+        analysis_df = pd.concat([analysis_df, channel_properties_table])
 
     overlap_img = np.all(img_labels, axis=0)
     overlap_labels = label(overlap_img)
     overlap_properties_dict = regionprops_table(label_image=overlap_labels,
                                                 properties=OVERLAP_PROPERTIES)
 
-    analysis_df = pd.concat([analysis_df, img_df])
-
+analysis_df.reset_index(drop=True, inplace=True)
 print(analysis_df)
 # imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_labels_1.ome-tif", img_labels)
 # print(img_labels.shape)
