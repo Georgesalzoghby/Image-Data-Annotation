@@ -5,6 +5,8 @@
 
 /assays/*/*.tif
 /assays/*/*/*.tif
+/assays/*/*.tiff
+/assays/*/*/*.tiff
 /venv/
 /.idea/
 /assays/CTCF-AID_merged/
