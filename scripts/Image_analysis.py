@@ -84,7 +84,8 @@ for img_file in files_list:
                                                 properties=OVERLAP_PROPERTIES)
 
 analysis_df.reset_index(drop=True, inplace=True)
-print(analysis_df)
+analysis_df.to_csv(os.path.join(OUTPUT_DIR, 'analysis_df.csv'))
+
 # imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_labels_1.ome-tif", img_labels)
 # print(img_labels.shape)
 
