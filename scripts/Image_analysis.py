@@ -5,40 +5,41 @@ from math import sqrt
 import numpy as np
 import pandas as pd
 import xtiff
-from tifffile import imread, imsave, imshow
+from tifffile import imread
 from skimage.filters import gaussian, threshold_otsu
 from skimage.measure import label, regionprops_table
-from skimage.segmentation import clear_border
+from skimage.segmentation import clear_border, watershed
 from skimage.morphology import remove_small_objects
 from porespy.metrics import regionprops_3D
-
-# from sklearn.metrics import jaccard_score
 
 # Input and output directories
 INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_merged'
 OUTPUT_DIR = f'{INPUT_DIR}_analysis'
 
 # Properties to measure
-ROI_PROPERTIES = ('label', 'area', 'filled_area',
-                  'major_axis_length',  # 'minor_axis_length',
-                  'centroid',
+ROI_PROPERTIES = ('label', 'area', 'filled_area', 'major_axis_length', 'centroid',
                   'weighted_centroid', 'equivalent_diameter', 'max_intensity', 'mean_intensity',
                   'min_intensity', 'coords')
-OVERLAP_PROPERTIES = ('label', 'area', 'filled_area', 'centroid',
-                      'coords')
+OVERLAP_PROPERTIES = ('label', 'area', 'filled_area', 'centroid', 'coords')
+SUBDOMAIN_PROPERTIES = ('label', 'area', 'filled_area', 'centroid', 'weighted_centroid', 'coords')
 
 # Analysis constants
 MIN_VOLUME = 200  # Minimum volume for the regions
+SUBDOMAIN_MIN_VOLUME = 36  # Minimum volume for the regions
 SIGMA = 0.5
 VOXEL_VOLUME = 0.04 * 0.04 * 0.125
 PIXEL_SIZE = (.125, .04, .04)  # as ZYX
 
 
 # Function definitions
-def process_channel(channel, properties, sigma=None, min_volume=None, binarize=True):
-    if sigma is not None:
-        channel = gaussian(channel, sigma=sigma, preserve_range=True).astype('uint16')
-    thresholded = channel > threshold_otsu(channel)
+def process_channel(channel: np.ndarray, properties: tuple, subdomain_properties: tuple,
+                    sigma: float = None, min_volume: int = None,
+                    subdomain_min_volume: int = None, binarize: bool = True):
+    if sigma is None:
+        filtered = gaussian
+    else:
+        filtered = gaussian(channel, sigma=sigma, preserve_range=True).astype('uint16')
+    thresholded = filtered > threshold_otsu(filtered)
     labels = label(thresholded)
     labels = clear_border(labels)
     if min_volume is not None:
@@ -46,17 +47,24 @@ def process_channel(channel, properties, sigma=None, min_volume=None, binarize=T
     if binarize:
         labels = labels > 0
         labels = labels.astype('uint8')
-    properties_dict = regionprops_table(label_image=labels, intensity_image=channel,
+    props_dict = regionprops_table(label_image=labels, intensity_image=channel,
                                         properties=properties)
-    properties_table = pd.DataFrame(properties_dict)
+    props_df = pd.DataFrame(props_dict)
     pore_props_3d = regionprops_3D(labels)
-    properties_table["sphericity"] = 0
-    properties_table["solidity"] = 0
-    for l in pore_props_3d:
-        properties_table.loc[properties_table.label == l.label, "sphericity"] = l.sphericity
-        properties_table.loc[properties_table.label == l.label, "solidity"] = l.solidity
+    props_df["sphericity"] = 0
+    props_df["solidity"] = 0
+    for lab in pore_props_3d:
+        props_df.loc[props_df.label == lab.label, "sphericity"] = lab.sphericity
+        props_df.loc[props_df.label == lab.label, "solidity"] = lab.solidity
 
-    return labels, properties_table
+    subdomain_labels = watershed(np.invert(channel), mask=labels)
+    if subdomain_min_volume is not None:
+        subdomain_labels = remove_small_objects(subdomain_labels, connectivity=subdomain_labels.ndim, min_size=min_volume)
+    subdomain_props_dict = regionprops_table(label_image=subdomain_labels, intensity_image=channel,
+                                             properties=subdomain_properties)
+    subdomain_props_df = pd.DataFrame(subdomain_props_dict)
+
+    return labels, props_df, subdomain_labels, subdomain_props_df
 
 
 if not os.path.isdir(OUTPUT_DIR):
@@ -69,57 +77,89 @@ nr_channels = config["nr_channels"]
 files_list = [f for f in os.listdir(INPUT_DIR) if f.endswith('.tiff')]
 
 analysis_df = pd.DataFrame()
+roi_df = pd.DataFrame()
+image_df = pd.DataFrame()
 
 for img_file in files_list:
-
     img_raw = imread(os.path.join(INPUT_DIR, img_file))
     img_raw = img_raw.transpose((1, 0, 2, 3))
 
-    img_labels = np.zeros_like(img_raw, dtype='uint8')
+    img_domain_labels = np.zeros_like(img_raw, dtype='uint8')
+    img_subdomain_labels = np.zeros_like(img_raw, dtype='uint8')
 
-    image_df = pd.DataFrame.from_dict({'Image Name': [img_file]})
+    # this order (starting by channel number) is not defined by default
+    for channel_index, channel_raw in enumerate(img_raw):
+        domain_labels, domain_props_df, subdomain_labels, subdomain_props_df = \
+            process_channel(channel=channel_raw, properties=ROI_PROPERTIES,
+                            subdomain_properties=SUBDOMAIN_PROPERTIES,
+                            sigma=SIGMA, min_volume=MIN_VOLUME,
+                            subdomain_min_volume=SUBDOMAIN_MIN_VOLUME)
 
-    for channel_index, channel_raw in \
-            enumerate(img_raw):  # this order (starting by channel number) is not defined by default
-        channel_labels, channel_properties_table = process_channel(channel_raw, ROI_PROPERTIES,
-                                                                   sigma=SIGMA, min_volume=MIN_VOLUME)
+        img_domain_labels[channel_index] = domain_labels
+        img_subdomain_labels[channel_index] = subdomain_labels
 
-        img_labels[channel_index] = channel_labels
+        domain_props_df['volume'] = domain_props_df['area'].apply(lambda a: a * VOXEL_VOLUME)
+        domain_props_df['volume_units'] = 'micron^3'
+        domain_props_df.insert(loc=0, column='Image Name', value=img_file)
+        domain_props_df.insert(loc=1, column='Channel ID', value=channel_index)
+        domain_props_df.insert(loc=2, column='domain_type', value='domain')
 
-        channel_properties_table['volume'] = channel_properties_table['filled_area'].apply(lambda a: a * VOXEL_VOLUME)
-        channel_properties_table['volume_units'] = 'micron^3'
-        channel_properties_table = channel_properties_table.add_prefix(f"ch-{channel_index}_")
+        subdomain_props_df['volume'] = subdomain_props_df['area'].apply(lambda a: a * VOXEL_VOLUME)
+        subdomain_props_df['volume_units'] = 'micron^3'
+        subdomain_props_df.insert(loc=0, column='Image Name', value=img_file)
+        subdomain_props_df.insert(loc=1, column='Channel ID', value=channel_index)
+        subdomain_props_df.insert(loc=2, column='domain_type', value='sub-domain')
 
-        channel_properties_table.insert(loc=0, column='Image Name', value=img_file)
-        image_df = pd.merge(image_df, channel_properties_table, on='Image Name', how='outer')
+        roi_df = pd.concat([roi_df, domain_props_df, subdomain_props_df], ignore_index=True)
 
-    xtiff.to_tiff(img=img_labels.transpose((1, 0, 2, 3)),
-                  file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_channel-linked-ROIs.ome.tiff')
+        # image_df = pd.merge(image_df, channel_df, on='Image Name', how='outer')
+
+    xtiff.to_tiff(img=img_domain_labels.transpose((1, 0, 2, 3)),
+                  file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_domains-ROIs.ome.tiff')
+                  )
+    xtiff.to_tiff(img=img_subdomain_labels.transpose((1, 0, 2, 3)),
+                  file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_sub-domains-ROIs.ome.tiff')
                   )
 
-    overlap_img = np.all(img_labels, axis=0)
-    xtiff.to_tiff(img=np.expand_dims(overlap_img, axis=1),
-                  file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_unlinked-ROIs.ome.tiff')
-                  )
+    if nr_channels == 2:
+        overlap_img = np.all(img_domain_labels, axis=0)
+        xtiff.to_tiff(img=np.expand_dims(overlap_img, axis=1),
+                      file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_unlinked-ROIs.ome.tiff')
+                      )
+        overlap_labels = label(overlap_img)
+        overlap_props_dict = regionprops_table(label_image=overlap_labels,
+                                               properties=OVERLAP_PROPERTIES)
+        overlap_props_df = pd.DataFrame(overlap_props_dict)
+        overlap_props_df['volume'] = overlap_props_df['area'].apply(lambda a: a * VOXEL_VOLUME)
+        overlap_props_df['volume_units'] = 'micron^3'
 
-    overlap_labels = label(overlap_img)
-    overlap_properties_dict = regionprops_table(label_image=overlap_labels,
-                                                properties=OVERLAP_PROPERTIES)
-    overlap_properties_table = pd.DataFrame(overlap_properties_dict)
-    overlap_properties_table['volume'] = overlap_properties_table['filled_area'].apply(lambda a: a * VOXEL_VOLUME)
-    overlap_properties_table['volume_units'] = 'micron^3'
+        overlap_props_df = overlap_props_df.add_prefix("overlap_")
+        overlap_props_df.insert(loc=0, column='Image Name', value=img_file)
 
-    overlap_properties_table = overlap_properties_table.add_prefix("overlap_")
-    overlap_properties_table.insert(loc=0, column='Image Name', value=img_file)
+        image_df = pd.concat([image_df, overlap_props_df])
+        try:
+            image_df['distance_x'] = \
+                abs(roi_df.loc[(roi_df['Image Name'] == img_file) & (roi_df['Channel ID'] == 0) & (roi_df['domain_type'] == 'domain')].at['weighted_centroid-2'] - \
+                    roi_df.loc[(roi_df['Image Name'] == img_file) & (roi_df['Channel ID'] == 1) & (roi_df['domain_type'] == 'domain'), 'weighted_centroid-2']) * \
+                    PIXEL_SIZE[2]
+            image_df['distance_y'] = \
+                abs(roi_df.loc[(roi_df['Image Name'] == img_file) & (roi_df['Channel ID'] == 0) & (roi_df['domain_type'] == 'domain'), 'weighted_centroid-1'] - \
+                    roi_df.loc[(roi_df['Image Name'] == img_file) & (roi_df['Channel ID'] == 1) & (roi_df['domain_type'] == 'domain'), 'weighted_centroid-1']) * \
+                    PIXEL_SIZE[1]
+            image_df['distance_z'] = \
+                abs(roi_df.loc[(roi_df['Image Name'] == img_file) & (roi_df['Channel ID'] == 0) & (roi_df['domain_type'] == 'domain'), 'weighted_centroid-0'] - \
+                    roi_df.loc[(roi_df['Image Name'] == img_file) & (roi_df['Channel ID'] == 1) & (roi_df['domain_type'] == 'domain'), 'weighted_centroid-0']) * \
+                    PIXEL_SIZE[0]
 
-    image_df = pd.merge(image_df, overlap_properties_table, on='Image Name')
-    try:
-        image_df['distance_x'] = abs(image_df['ch-0_weighted_centroid-2'] - image_df['ch-1_weighted_centroid-2']) * PIXEL_SIZE[2]
-        image_df['distance_y'] = abs(image_df['ch-0_weighted_centroid-1'] - image_df['ch-1_weighted_centroid-1']) * PIXEL_SIZE[1]
-        image_df['distance_z'] = abs(image_df['ch-0_weighted_centroid-0'] - image_df['ch-1_weighted_centroid-0']) * PIXEL_SIZE[0]
-        image_df['distance3d'] = sqrt(image_df.distance_x ** 2 + image_df.distance_y ** 2 + image_df.distance_z ** 2)
-    except KeyError:
-        pass
+            image_df['distance3d'] = sqrt(image_df.distance_x ** 2 + image_df.distance_y ** 2 + image_df.distance_z ** 2)
+            image_df['distance_units'] = 'micron'
+
+        except KeyError:
+            pass
+        except TypeError:
+            pass
+
+        # TODO: implement Matrix overlap
 
     analysis_df = pd.concat([analysis_df, image_df], ignore_index=True)
 
