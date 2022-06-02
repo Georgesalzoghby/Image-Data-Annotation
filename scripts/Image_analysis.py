@@ -10,6 +10,7 @@ from skimage.filters import gaussian, threshold_otsu
 from skimage.measure import label, regionprops_table
 from skimage.segmentation import clear_border
 from skimage.morphology import remove_small_objects
+from porespy.metrics import regionprops_3D
 
 # from sklearn.metrics import jaccard_score
 
@@ -19,7 +20,7 @@ OUTPUT_DIR = f'{INPUT_DIR}_analysis'
 
 # Properties to measure
 ROI_PROPERTIES = ('label', 'area', 'filled_area',
-                  # 'major_axis_length', 'minor_axis_length',
+                  'major_axis_length',  # 'minor_axis_length',
                   'centroid',
                   'weighted_centroid', 'equivalent_diameter', 'max_intensity', 'mean_intensity',
                   'min_intensity', 'coords')
@@ -47,7 +48,12 @@ def process_channel(channel, properties, sigma=None, min_volume=None, binarize=T
     properties_dict = regionprops_table(label_image=labels, intensity_image=channel,
                                         properties=properties)
     properties_table = pd.DataFrame(properties_dict)
-
+    pore_props_3d = regionprops_3D(labels)
+    properties_table["sphericity"] = 0
+    properties_table["solidity"] = 0
+    for l in pore_props_3d:
+        properties_table.loc[properties_table.label == l.label, "sphericity"] = l.sphericity
+        properties_table.loc[properties_table.label == l.label, "solidity"] = l.solidity
 
     return labels, properties_table
 
@@ -106,18 +112,15 @@ for img_file in files_list:
     overlap_properties_table.insert(loc=0, column='Image Name', value=img_file)
 
     image_df = pd.merge(image_df, overlap_properties_table, on='Image Name')
-    # analysis_df['Channel ID'] = analysis_df['Channel ID'].astype('Int64')
-    analysis_df = pd.concat([analysis_df, image_df], ignore_index=True)
+    try:
+        image_df['distance_x'] = abs(image_df['ch-0_weighted_centroid-2'] - image_df['ch-1_weighted_centroid-2']) * PIXEL_SIZE[2]
+        image_df['distance_y'] = abs(image_df['ch-0_weighted_centroid-1'] - image_df['ch-1_weighted_centroid-1']) * PIXEL_SIZE[1]
+        image_df['distance_z'] = abs(image_df['ch-0_weighted_centroid-0'] - image_df['ch-1_weighted_centroid-0']) * PIXEL_SIZE[0]
+        image_df['distance3d'] = sqrt(image_df.distance_x ** 2 + image_df.distance_y ** 2 + image_df.distance_z ** 2)
+    except KeyError:
+        pass
 
-## Some additional measurements
-# Distance
-try:
-    analysis_df.distance_x = analysis_df.apply(lambda x: abs(x["ch-0_weighted_centroid-2"] - x["ch-1_weighted_centroid-2"]))
-    analysis_df.distance_y = analysis_df.apply(lambda x: abs(x["ch-0_weighted_centroid-1"] - x["ch-1_weighted_centroid-1"]))
-    analysis_df.distance_z = analysis_df.apply(lambda x: abs(x["ch-0_weighted_centroid-0"] - x["ch-1_weighted_centroid-0"]))
-    analysis_df.distance3d = analysis_df.apply(lambda x: sqrt(x.distance_x ** 2 + x.distance_y ** 2 + x.distance_z ** 2))
-except KeyError:
-    pass
+    analysis_df = pd.concat([analysis_df, image_df], ignore_index=True)
 
 analysis_df.to_csv(os.path.join(OUTPUT_DIR, 'analysis_df.csv'))
 
