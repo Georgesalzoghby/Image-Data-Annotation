@@ -31,6 +31,7 @@ OVERLAP_PROPERTIES = ('label', 'area', 'filled_area', 'centroid',
 MIN_VOLUME = 200  # Minimum volume for the regions
 SIGMA = 0.5
 VOXEL_VOLUME = 0.04 * 0.04 * 0.125
+PIXEL_SIZE = (.125, .04, .04)  # as ZYX
 
 
 # Function definitions
