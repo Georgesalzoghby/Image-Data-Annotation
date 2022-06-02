@@ -10,6 +10,7 @@ dependencies:
   - python-bioformats
   - pip
   - scikit-image
+  - porespy
   - pandas
   - numpy
   - pip:
