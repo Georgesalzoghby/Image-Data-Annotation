@@ -54,8 +54,9 @@ def process_channel(channel: np.ndarray, properties: tuple, subdomain_properties
     domain_labels = label(thresholded)
     domain_labels = clear_border(domain_labels)
     if min_volume is not None:
+        domain_labels = domain_labels > 0
         domain_labels = remove_small_objects(domain_labels, connectivity=domain_labels.ndim, min_size=min_volume)
-        domain_labels = relabel_sequential(domain_labels)[0]
+        domain_labels = relabel_sequential(domain_labels.astype('uint8'))[0]
     if binarize:
         domain_labels = domain_labels > 0
         domain_labels = domain_labels.astype('uint8')
@@ -80,6 +81,8 @@ def process_channel(channel: np.ndarray, properties: tuple, subdomain_properties
                                              properties=subdomain_properties)
     subdomain_props_df = pd.DataFrame(subdomain_props_dict)
     subdomain_props_df.insert(loc=0, column='roi_type', value='subdomain')
+
+    # TODO: Add here nr of subdomains
 
     # Merging domain tables
     props_df = pd.concat([domain_props_df, subdomain_props_df])
