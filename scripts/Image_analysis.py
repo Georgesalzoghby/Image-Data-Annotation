@@ -242,6 +242,11 @@ def run():
 
     analysis_df.to_csv(os.path.join(OUTPUT_DIR, 'analysis_df.csv'))
 
+    metadata_df = pd.read_csv(os.path.join(INPUT_DIR, "Experiment_A_assays.csv"), header=1)
+
+    merge_df = pd.merge(metadata_df, analysis_df, on="Image Name")
+    merge_df.to_csv(os.path.join(OUTPUT_DIR, 'merged_df.csv'))
+
 
 if __name__ == '__main__':
     run()
