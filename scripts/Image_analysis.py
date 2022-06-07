@@ -211,6 +211,7 @@ def run():
     analysis_df = pd.DataFrame()
 
     for img_file in files_list:
+        print(f'Processing image: {img_file}')
         image = imread(os.path.join(INPUT_DIR, img_file))
         image = image.transpose((1, 0, 2, 3))
 
@@ -244,6 +245,7 @@ def run():
 
 if __name__ == '__main__':
     run()
+    print("done")
 
 # imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_labels_1.ome-tif", img_labels)
 # print(img_labels.shape)
