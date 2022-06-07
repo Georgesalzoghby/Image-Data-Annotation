@@ -29,7 +29,7 @@ def run(assays_directory, image_files_extension, token_sep="_"):
             table = df(columns=column_names)
 
             for file_name in files_list:
-                line = [["CTCF-AID"] + [file_name] + file_name.split(sep=token_sep)]
+                line = [[file_name] + file_name.split(sep=token_sep)]
                 line[0][-1] = line[0][-1][:-len(image_files_extension)]
                 line = df(line, columns=column_names)
                 table = pd.concat([table, line], ignore_index=True)
