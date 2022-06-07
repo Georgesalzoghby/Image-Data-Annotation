@@ -13,8 +13,8 @@ from skimage.morphology import remove_small_objects
 from porespy.metrics import regionprops_3D
 
 # Input and output directories
-INPUT_DIR = '/home/julio/PycharmProjects/Image-Data-Annotation/assays/CTCF-AID_merged'
-OUTPUT_DIR = f'{INPUT_DIR}_analysis'
+INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID'
+OUTPUT_DIR = f'{INPUT_DIR}'
 
 # Properties to measure
 DOMAIN_PROPERTIES = ('label', 'area', 'filled_area', 'major_axis_length', 'centroid',
