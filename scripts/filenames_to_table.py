@@ -71,3 +71,4 @@ def run(assays_directory, image_files_extension, token_sep="_"):
 if __name__ == "__main__":
     run(assays_directory=INPUT_IMAGE_DIR,
         image_files_extension=IMAGE_FILE_EXTENSION)
+    print("done")
