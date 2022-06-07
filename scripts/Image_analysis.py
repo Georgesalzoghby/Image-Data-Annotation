@@ -17,11 +17,38 @@ INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/
 OUTPUT_DIR = f'{INPUT_DIR}'
 
 # Properties to measure
-DOMAIN_PROPERTIES = ('label', 'area', 'filled_area', 'major_axis_length', 'centroid',
-                     'weighted_centroid', 'equivalent_diameter', 'max_intensity', 'mean_intensity',
-                     'min_intensity', 'coords')
-SUBDOMAIN_PROPERTIES = ('label', 'area', 'filled_area', 'centroid', 'weighted_centroid', 'coords')
-OVERLAP_PROPERTIES = ('label', 'area', 'filled_area', 'centroid', 'coords')
+DOMAIN_PROPERTIES = (
+    'label',
+    'area',
+    'filled_area',
+    'major_axis_length',
+    'centroid',
+    'weighted_centroid',
+    'equivalent_diameter',
+    'max_intensity',
+    'mean_intensity',
+    'min_intensity',
+    # 'coords',
+)
+SUBDOMAIN_PROPERTIES = (
+    'label',
+    'area',
+    'filled_area',
+    'major_axis_length',
+    'centroid',
+    'weighted_centroid',
+    'max_intensity',
+    'mean_intensity',
+    'min_intensity',
+    # 'coords',
+)
+OVERLAP_PROPERTIES = (
+    'label',
+    'area',
+    'filled_area',
+    'centroid',
+    # 'coords',
+)
 
 # Analysis constants
 DOMAIN_MIN_VOLUME = 200  # Minimum volume for the regions
