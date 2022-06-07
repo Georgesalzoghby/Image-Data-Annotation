@@ -7,8 +7,8 @@ import json
 ## Define some constants
 #INPUT_IMAGE_DIR = input("input directory: ")
 # INPUT_IMAGE_DIR = os.path.join(".", "assays")
-# INPUT_IMAGE_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays"
-INPUT_IMAGE_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays"
+INPUT_IMAGE_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays"
+# INPUT_IMAGE_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays"
 IMAGE_FILE_EXTENSION = ".ome.tiff"
 
 
