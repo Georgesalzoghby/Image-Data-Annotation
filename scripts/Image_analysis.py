@@ -13,7 +13,8 @@ from skimage.morphology import remove_small_objects
 from porespy.metrics import regionprops_3D
 
 # Input and output directories
-INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID'
+INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged"
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID'
 OUTPUT_DIR = f'{INPUT_DIR}'
 
 # Properties to measure
@@ -140,6 +141,12 @@ def process_overlap(labels, domains_df, overlap_properties):
 
         overlap_props_df['volume'] = overlap_props_df['area'].apply(lambda a: a * VOXEL_VOLUME)
         overlap_props_df['volume_units'] = 'micron^3'
+
+        # jaccard = (|A inter B| / (|A| + |B| - |A inter B|  ))
+        overlap_props_df['overlap_fraction'] = abs(overlap_props_df.at[0,'volume']) / \
+                            (abs(domains_df.loc[(domains_df['Channel ID'] == 0) & (domains_df['roi_type'] == 'domain'), 'volume'].values[0]) +
+                             abs(domains_df.loc[(domains_df['Channel ID'] == 1) & (domains_df['roi_type'] == 'domain'), 'volume'].values[0]) -
+                             abs(overlap_props_df.at[0,'volume']))
 
         overlap_props_df['distance_x'] = \
             abs(domains_df.loc[
