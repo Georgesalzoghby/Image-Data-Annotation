@@ -51,6 +51,7 @@ OVERLAP_PROPERTIES = (
 )
 
 # Analysis constants
+IMAGE_FILE_EXTENSION = "ome.tiff"
 DOMAIN_MIN_VOLUME = 200  # Minimum volume for the regions
 SUBDOMAIN_MIN_VOLUME = 36  # Minimum volume for the regions
 SIGMA = 0.5
@@ -203,7 +204,9 @@ def process_image(image, domain_properties, subdomain_properties, overlap_proper
 
 
 def run():
-    files_list = [f for f in os.listdir(INPUT_DIR) if f.endswith('.tiff')]
+    files_list = [f for f in os.listdir(INPUT_DIR) if
+                  f.endswith(IMAGE_FILE_EXTENSION) and
+                  not f.endswith(f"ROIs.{IMAGE_FILE_EXTENSION}")]
 
     analysis_df = pd.DataFrame()
 
