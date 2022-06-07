@@ -113,7 +113,7 @@ def process_channel(channel: np.ndarray, properties: tuple, subdomain_properties
     # TODO: Add here nr of subdomains
 
     # Merging domain tables
-    props_df = pd.concat([domain_props_df, subdomain_props_df])
+    props_df = pd.concat([domain_props_df, subdomain_props_df], ignore_index=True)
 
     # Calculating some measurements
     props_df['volume'] = props_df['area'].apply(lambda a: a * VOXEL_VOLUME)
@@ -198,7 +198,7 @@ def process_image(image, domain_properties, subdomain_properties, overlap_proper
                                                        domains_df=rois_df,
                                                        overlap_properties=overlap_properties)
     if overlap_props_df is not None:
-        rois_df = pd.concat([rois_df, overlap_props_df])
+        rois_df = pd.concat([rois_df, overlap_props_df], ignore_index=True)
 
     return rois_df, domain_labels, subdomain_labels, overlap_labels
 
