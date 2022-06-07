@@ -13,17 +13,45 @@ from skimage.morphology import remove_small_objects
 from porespy.metrics import regionprops_3D
 
 # Input and output directories
-INPUT_DIR = '/home/julio/PycharmProjects/Image-Data-Annotation/assays/CTCF-AID_merged'
-OUTPUT_DIR = f'{INPUT_DIR}_analysis'
+INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID'
+OUTPUT_DIR = f'{INPUT_DIR}'
 
 # Properties to measure
-DOMAIN_PROPERTIES = ('label', 'area', 'filled_area', 'major_axis_length', 'centroid',
-                     'weighted_centroid', 'equivalent_diameter', 'max_intensity', 'mean_intensity',
-                     'min_intensity', 'coords')
-SUBDOMAIN_PROPERTIES = ('label', 'area', 'filled_area', 'centroid', 'weighted_centroid', 'coords')
-OVERLAP_PROPERTIES = ('label', 'area', 'filled_area', 'centroid', 'coords')
+DOMAIN_PROPERTIES = (
+    'label',
+    'area',
+    'filled_area',
+    'major_axis_length',
+    'centroid',
+    'weighted_centroid',
+    'equivalent_diameter',
+    'max_intensity',
+    'mean_intensity',
+    'min_intensity',
+    # 'coords',
+)
+SUBDOMAIN_PROPERTIES = (
+    'label',
+    'area',
+    'filled_area',
+    'major_axis_length',
+    'centroid',
+    'weighted_centroid',
+    'max_intensity',
+    'mean_intensity',
+    'min_intensity',
+    # 'coords',
+)
+OVERLAP_PROPERTIES = (
+    'label',
+    'area',
+    'filled_area',
+    'centroid',
+    # 'coords',
+)
 
 # Analysis constants
+IMAGE_FILE_EXTENSION = "ome.tiff"
 DOMAIN_MIN_VOLUME = 200  # Minimum volume for the regions
 SUBDOMAIN_MIN_VOLUME = 36  # Minimum volume for the regions
 SIGMA = 0.5
@@ -85,7 +113,7 @@ def process_channel(channel: np.ndarray, properties: tuple, subdomain_properties
     # TODO: Add here nr of subdomains
 
     # Merging domain tables
-    props_df = pd.concat([domain_props_df, subdomain_props_df])
+    props_df = pd.concat([domain_props_df, subdomain_props_df], ignore_index=True)
 
     # Calculating some measurements
     props_df['volume'] = props_df['area'].apply(lambda a: a * VOXEL_VOLUME)
@@ -170,17 +198,20 @@ def process_image(image, domain_properties, subdomain_properties, overlap_proper
                                                        domains_df=rois_df,
                                                        overlap_properties=overlap_properties)
     if overlap_props_df is not None:
-        rois_df = pd.concat([rois_df, overlap_props_df])
+        rois_df = pd.concat([rois_df, overlap_props_df], ignore_index=True)
 
     return rois_df, domain_labels, subdomain_labels, overlap_labels
 
 
 def run():
-    files_list = [f for f in os.listdir(INPUT_DIR) if f.endswith('.tiff')]
+    files_list = [f for f in os.listdir(INPUT_DIR) if
+                  f.endswith(IMAGE_FILE_EXTENSION) and
+                  not f.endswith(f"ROIs.{IMAGE_FILE_EXTENSION}")]
 
     analysis_df = pd.DataFrame()
 
     for img_file in files_list:
+        print(f'Processing image: {img_file}')
         image = imread(os.path.join(INPUT_DIR, img_file))
         image = image.transpose((1, 0, 2, 3))
 
@@ -211,9 +242,15 @@ def run():
 
     analysis_df.to_csv(os.path.join(OUTPUT_DIR, 'analysis_df.csv'))
 
+    metadata_df = pd.read_csv(os.path.join(INPUT_DIR, "Experiment_A_assays.csv"), header=1)
+
+    merge_df = pd.merge(metadata_df, analysis_df, on="Image Name")
+    merge_df.to_csv(os.path.join(OUTPUT_DIR, 'merged_df.csv'))
+
 
 if __name__ == '__main__':
     run()
+    print("done")
 
 # imsave("C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged_matpython\\20190720_RI512_CTCF-AID_AUX-CTL_61b_61a_SIR_2C_ALN_THR_labels_1.ome-tif", img_labels)
 # print(img_labels.shape)

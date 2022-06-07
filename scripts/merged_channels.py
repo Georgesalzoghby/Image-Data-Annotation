@@ -105,8 +105,9 @@ def get_ome_xml(img: np.ndarray, image_name: Optional[str], channel_names: Optio
 # sourcery skip: merge-nested-ifs, raise-specific-error, use-fstring-for-concatenation
 CHANNEL_NAME_MAPPINGS = {'683.0': 'Alexa-647', '608.0': 'ATTO-555', '435.0': 'DAPI'}
 
-INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID"
-OUTPUT_DIR = f'{INPUT_DIR}_merged'
+# INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID"
+INPUT_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID"
+OUTPUT_DIR = f'{INPUT_DIR}'
 if not os.path.exists(OUTPUT_DIR):
     os.mkdir(OUTPUT_DIR)
 
@@ -117,12 +118,12 @@ nr_channels = config["nr_channels"]
 files_set = {f[:-7] for f in os.listdir(INPUT_DIR) if f.endswith('.tif')}
 
 try:
-    conn = BlitzGateway(username="galzoghby",
-                        passwd="",
+    conn = BlitzGateway(username=input('username: '),
+                        passwd=getpass('password: '),
                         host="omero.mri.cnrs.fr",
                         port=4064,
                         group="Cavalli Lab",
-                        secure= True)
+                        secure=True)
     conn.connect()
 
     for file_root in files_set:
@@ -220,5 +221,4 @@ try:
 
 finally:
     conn.close()
-
     print('Done')
