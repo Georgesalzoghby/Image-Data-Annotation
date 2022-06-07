@@ -118,12 +118,12 @@ nr_channels = config["nr_channels"]
 files_set = {f[:-7] for f in os.listdir(INPUT_DIR) if f.endswith('.tif')}
 
 try:
-    conn = BlitzGateway(username="galzoghby",
-                        passwd="",
+    conn = BlitzGateway(username=input('username: '),
+                        passwd=getpass('password: '),
                         host="omero.mri.cnrs.fr",
                         port=4064,
                         group="Cavalli Lab",
-                        secure= True)
+                        secure=True)
     conn.connect()
 
     for file_root in files_set:
