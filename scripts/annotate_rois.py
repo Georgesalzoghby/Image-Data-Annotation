@@ -56,7 +56,6 @@ try:
         rois = {}
         for i in range(1, labels_3d.max() + 1):
             masks = []
-
             bin_img = labels_3d == i
 
             # Find bounding box to minimise size of mask
@@ -84,7 +83,7 @@ try:
                     # https://github.com/numpy/numpy/issues/5377
                     # Need to convert to an int array
                     # mask.setBytes(np.packbits(submask))
-                    mask.setBytes(np.packbits(np.asarray(submask, dtype=int)))
+                    mask.setBytes(np.packbits(np.asarray(plane, dtype=int)))
                     mask.setWidth(rdouble(w))
                     mask.setHeight(rdouble(h))
                     mask.setX(rdouble(x0))
@@ -92,7 +91,7 @@ try:
                     mask.setTheZ(rint(z))
 
                     if rgb is not None:
-                        fill_rgb = rgb + (80,)
+                        fill_rgb = rgb + (120,)
                         stroke_rgb = rgb + (255,)
                         fill_rgb = ColorHolder.fromRGBA(*fill_rgb)
                         stroke_rgb = ColorHolder.fromRGBA(*stroke_rgb)
