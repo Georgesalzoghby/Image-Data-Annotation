@@ -21,7 +21,6 @@ try:
 
     updateService = conn.getUpdateService()
 
-
     def create_roi(img, shapes, name):
         # create an ROI, link it to Image
         roi = RoiI()
