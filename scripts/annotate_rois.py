@@ -11,10 +11,8 @@ from tifffile import tifffile
 INPUT_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID"
 
 try:
-    conn = BlitzGateway(  # username=input('username: '),
-        username="jmateos",
-        passwd="vm4RwMWjBm2RNDd",
-        # passwd=getpass('password: '),
+    conn = BlitzGateway(username=input('username: '),
+        passwd=getpass('password: '),
         host="bioimage.france-bioinformatique.fr",
         port=4075,
         # group="Cavalli Lab",
@@ -37,7 +35,7 @@ try:
 
 
     def masks_from_labels_image_3d(
-            labels_3d, rgb=None, c=None, t=None, text=None,
+            labels_3d, rgba=None, c=None, t=None, text=None,
             raise_on_no_mask=True):
         """
         Create a mask shape from a binary image (background=0)
@@ -55,9 +53,11 @@ try:
         """
         rois = {}
         for i in range(1, labels_3d.max() + 1):
+            if not np.any(labels_3d == i):
+                continue
+
             masks = []
             bin_img = labels_3d == i
-
             # Find bounding box to minimise size of mask
             xmask = bin_img.sum(0).sum(0).nonzero()[0]
             ymask = bin_img.sum(0).sum(1).nonzero()[0]
@@ -77,7 +77,7 @@ try:
                 submask = []
 
             for z, plane in enumerate(submask):
-                if np.any(plane == i):
+                if np.any(plane):
                     mask = MaskI()
                     # BUG in older versions of Numpy:
                     # https://github.com/numpy/numpy/issues/5377
@@ -90,13 +90,9 @@ try:
                     mask.setY(rdouble(y0))
                     mask.setTheZ(rint(z))
 
-                    if rgb is not None:
-                        fill_rgb = rgb + (120,)
-                        stroke_rgb = rgb + (255,)
-                        fill_rgb = ColorHolder.fromRGBA(*fill_rgb)
-                        stroke_rgb = ColorHolder.fromRGBA(*stroke_rgb)
-                        mask.setFillColor(rint(fill_rgb.getInt()))
-                        mask.setStrokeColor(rint(stroke_rgb.getInt()))
+                    if rgba is not None:
+                        rgba = ColorHolder.fromRGBA(*rgba)
+                        mask.setFillColor(rint(rgba.getInt()))
                     if c is not None:
                         mask.setTheC(rint(c))
                     if t is not None:
@@ -112,7 +108,7 @@ try:
 
 
     def rois_from_labels_3d(img, labels_3d, rgba, c=None, t=None, text=None):
-        rois = masks_from_labels_image_3d(labels_3d, rgb=rgba, c=c, t=t,
+        rois = masks_from_labels_image_3d(labels_3d, rgba=rgba, c=c, t=t,
                                           raise_on_no_mask=False)
 
         for label, masks in rois.items():
@@ -133,15 +129,15 @@ try:
             domains_img = domains_img.transpose((1, 0, 2, 3))
             for c, channel_labels in enumerate(domains_img):
                 if c == 0:
-                    rgb = (255, 0, 0)
+                    rgba = (255, 0, 0, 40)
                 elif c == 1:
-                    rgb = (0, 255, 0)
+                    rgba = (0, 255, 0, 40)
                 else:
-                    rgb = (0, 0, 255)
+                    rgba = (0, 0, 255, 40)
 
                 rois_from_labels_3d(img=image,
                                     labels_3d=channel_labels,
-                                    rgba=rgb,
+                                    rgba=rgba,
                                     c=c,
                                     text='domain')
         except FileNotFoundError:
@@ -153,15 +149,15 @@ try:
             subdomains_img = subdomains_img.transpose((1, 0, 2, 3))
             for c, channel_labels in enumerate(subdomains_img):
                 if c == 0:
-                    rgb = (255, 0, 0)
+                    rgba = (180, 0, 0, 60)
                 elif c == 1:
-                    rgb = (0, 255, 0)
+                    rgba = (0, 180, 0, 60)
                 else:
-                    rgb = (0, 0, 255)
+                    rgba = (0, 0, 180, 60)
 
                 rois_from_labels_3d(img=image,
                                     labels_3d=channel_labels,
-                                    rgba=rgb,
+                                    rgba=rgba,
                                     c=c,
                                     text='subdomain')
         except FileNotFoundError:
@@ -170,10 +166,10 @@ try:
         # Overlaps
         try:
             overlap_img = tifffile.imread(os.path.join(INPUT_DIR, f"{image_name[:-9]}_overlap-ROIs.ome.tiff"))
-            rgb = (0, 0, 255)
+            rgba = (0, 0, 255, 120)
             rois_from_labels_3d(img=image,
                                 labels_3d=overlap_img,
-                                rgba=rgb,
+                                rgba=rgba,
                                 text='overlap')
         except FileNotFoundError:
             pass
