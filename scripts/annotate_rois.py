@@ -32,7 +32,6 @@ try:
         # Save the ROI (saves any linked shapes too)
         return updateService.saveAndReturnObject(roi)
 
-
     def masks_from_labels_image_3d(
             labels_3d, rgba=None, c=None, t=None, text=None,
             raise_on_no_mask=True):
@@ -90,8 +89,8 @@ try:
                     mask.setTheZ(rint(z))
 
                     if rgba is not None:
-                        rgba = ColorHolder.fromRGBA(*rgba)
-                        mask.setFillColor(rint(rgba.getInt()))
+                        ch = ColorHolder.fromRGBA(*rgba)
+                        mask.setFillColor(rint(ch.getInt()))
                     if c is not None:
                         mask.setTheC(rint(c))
                     if t is not None:
@@ -128,11 +127,11 @@ try:
             domains_img = domains_img.transpose((1, 0, 2, 3))
             for c, channel_labels in enumerate(domains_img):
                 if c == 0:
-                    rgba = (255, 0, 0, 40)
+                    rgba = (255, 0, 0, 30)
                 elif c == 1:
-                    rgba = (0, 255, 0, 40)
+                    rgba = (0, 255, 0, 30)
                 else:
-                    rgba = (0, 0, 255, 40)
+                    rgba = (0, 0, 255, 30)
 
                 rois_from_labels_3d(img=image,
                                     labels_3d=channel_labels,
@@ -148,11 +147,11 @@ try:
             subdomains_img = subdomains_img.transpose((1, 0, 2, 3))
             for c, channel_labels in enumerate(subdomains_img):
                 if c == 0:
-                    rgba = (180, 0, 0, 60)
+                    rgba = (180, 0, 0, 50)
                 elif c == 1:
-                    rgba = (0, 180, 0, 60)
+                    rgba = (0, 180, 0, 50)
                 else:
-                    rgba = (0, 0, 180, 60)
+                    rgba = (0, 0, 180, 50)
 
                 rois_from_labels_3d(img=image,
                                     labels_3d=channel_labels,
@@ -165,7 +164,7 @@ try:
         # Overlaps
         try:
             overlap_img = tifffile.imread(os.path.join(INPUT_DIR, f"{image_name[:-9]}_overlap-ROIs.ome.tiff"))
-            rgba = (0, 0, 255, 120)
+            rgba = (0, 0, 255, 80)
             rois_from_labels_3d(img=image,
                                 labels_3d=overlap_img,
                                 rgba=rgba,
@@ -173,5 +172,9 @@ try:
         except FileNotFoundError:
             pass
 
-except Exception:
+except Exception as e:
+    print(e)
+
+finally:
     conn.close()
+    print('done')
