@@ -135,7 +135,7 @@ def process_overlap(labels, domains_df, overlap_properties):
 
         # if there is no overlap no rows are created. We nevertheless need to measure distance
         if len(overlap_props_df) == 0:
-            overlap_props_df.loc[0, 'area'] = int(0)
+            overlap_props_df.loc[0, 'area'] = 0
 
         overlap_props_df.insert(loc=0, column='roi_type', value='overlap')
 
