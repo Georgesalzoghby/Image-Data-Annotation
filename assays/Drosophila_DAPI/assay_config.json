@@ -12,5 +12,6 @@
     "Ch Number"
      ],
   "merges": {"Cell Line Name": "cell_lines.csv"
-  }
+  },
+  "nr_channels": 1
 }

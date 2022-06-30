@@ -13,5 +13,6 @@
   ],
   "merges": {"Cell Line Name": "cell_lines.csv",
              "Probe Ch0": "probe_table_ch0.csv"
-  }
+  },
+  "nr_channels": 1
 }

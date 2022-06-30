@@ -1,5 +1,5 @@
 {
-  "assay_id": "Experiment_A",
+  "assay_id": "Experiment_B",
   "column_names": [
     "Image Name",
     "Date",
@@ -19,5 +19,6 @@
              "Protocol": "treatment_protocol.csv",
              "Probe Ch0": "probe_table_ch0.csv",
              "Probe Ch1": "probe_table_ch1.csv"
-  }
+  },
+  "nr_channels": 2
 }

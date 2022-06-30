@@ -15,5 +15,6 @@
   "merges": {"Cell Line Name": "cell_lines.csv",
              "Protocol": "treatment_protocol.csv",
              "Probe Ch0": "probe_table_ch0.csv"
-  }
+  },
+  "nr_channels": 1
 }
