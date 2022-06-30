@@ -40,7 +40,7 @@ crop_to_raw = {
 ## Drosophila_DAPI
     "20191214_RI508_Embryo_DAPI_SIR_THR": 719588,
 ## Drosophila_TAD
-    "20191028_RI510_Embryo-Y-GFP-male_TAD-565_SIR_THR": 712571,
+    "20191028_RI510_Embryo-Y-GFP-male_Drosophila-TAD_SIR_THR": 712571,
 ## ESC_1C
     "20180329_RI510_ESC_32_SIR_THR": 566468,
     "20180814_RI510_ESC_51_SIR_THR": 613035,
@@ -217,7 +217,7 @@ crop_to_SIR = {
 ## Drosophila_DAPI
     "20191214_RI508_Embryo_DAPI_SIR_THR": 719576,
 ## Drosophila_TAD
-    "20191028_RI510_Embryo-Y-GFP-male_TAD-565_SIR_THR": 712559,
+    "20191028_RI510_Embryo-Y-GFP-male_Drosophila-TAD_SIR_THR": 712559,
 ## ESC_1C
     "20180329_RI510_ESC_32_SIR_THR": 566475,
     "20180814_RI510_ESC_51_SIR_THR": 613022,
