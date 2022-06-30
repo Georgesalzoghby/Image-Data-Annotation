@@ -13,7 +13,7 @@
     "Aligned Tag",
     "Thresholded Tag",
     "Image Number",
-    "Ch number"
+    "Ch Number"
      ],
   "merges": {"Cell Line Name": "cell_lines.csv",
              "Protocol": "treatment_protocol.csv",
