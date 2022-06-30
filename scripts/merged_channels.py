@@ -103,7 +103,7 @@ def get_ome_xml(img: np.ndarray, image_name: Optional[str], channel_names: Optio
 
 
 # sourcery skip: merge-nested-ifs, raise-specific-error, use-fstring-for-concatenation
-CHANNEL_NAME_MAPPINGS = {'683.0': 'Alexa-647', '608.0': 'ATTO-555', '435.0': 'DAPI'}
+CHANNEL_NAME_MAPPINGS = {'683.0': 'Alexa-647', '608.0': 'ATTO-555', '435': 'DAPI'}
 
 # INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID"
 INPUT_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID"
@@ -133,7 +133,9 @@ try:
             new_channel = tifffile.imread(os.path.join(INPUT_DIR, f"{file_root}_C{ch + 1}.tif"))
             image = np.stack((image, new_channel))
         if nr_channels == 1:
-            image = np.expand_dims(image, 0)
+            image = np.expand_dims(image, 0)  # adding non existing channel dimension
+            if image.ndim == 3:  # There was no z so we add it
+                image = np.expand_dims(image, 0)
 
         print(f"Processing file {file_root}")
 
