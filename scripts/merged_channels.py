@@ -94,8 +94,8 @@ def get_ome_xml(img: np.ndarray, image_name: Optional[str], channel_names: Optio
             'EmissionWavelengthUnit': ome_xml_kwargs['Channel']['EmissionWavelengthUnit'][channel_id],
             'ExcitationWavelength': str(ome_xml_kwargs['Channel']['ExcitationWavelength'][channel_id]),
             'ExcitationWavelengthUnit': ome_xml_kwargs['Channel']['ExcitationWavelengthUnit'][channel_id]
-            }
-        )
+        }
+                                                 )
         if channel_names is not None and channel_names[channel_id]:
             channel_element.set('Name', channel_names[channel_id])
     ElementTree.SubElement(pixels_element, 'TiffData')
@@ -103,19 +103,26 @@ def get_ome_xml(img: np.ndarray, image_name: Optional[str], channel_names: Optio
 
 
 # sourcery skip: merge-nested-ifs, raise-specific-error, use-fstring-for-concatenation
-CHANNEL_NAME_MAPPINGS = {'683.0': 'Alexa-647', '608.0': 'ATTO-555', '435': 'DAPI'}
+CHANNEL_NAME_MAPPINGS = {'683.0': 'Alexa-647', '608.0': 'ATTO-565', '528.0': 'Alexa-555', '435': 'DAPI'}
 
-# INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID"
-INPUT_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID"
-OUTPUT_DIR = f'{INPUT_DIR}'
-if not os.path.exists(OUTPUT_DIR):
-    os.mkdir(OUTPUT_DIR)
-
-with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file:
-    config = json.load(config_file)
-
-nr_channels = config["nr_channels"]
-files_set = {f[:-7] for f in os.listdir(INPUT_DIR) if f.endswith('.tif')}
+INPUT_DIRS = [
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_DAPI",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_TAD",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_1C",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_2C",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_DAPI",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_1C",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_2C",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_1C",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_2C",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_1C",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_2C",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX",
+    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL"
+            ]
 
 try:
     conn = BlitzGateway(username=input('username: '),
@@ -126,100 +133,119 @@ try:
                         secure=True)
     conn.connect()
 
-    for file_root in files_set:
-        image = tifffile.imread(os.path.join(INPUT_DIR, f"{file_root}_C1.tif"))
+    for INPUT_DIR in INPUT_DIRS:
+        print(f"Merging {INPUT_DIR}")
+        OUTPUT_DIR = f'{INPUT_DIR}'
+        if not os.path.exists(OUTPUT_DIR):
+            os.mkdir(OUTPUT_DIR)
 
-        for ch in range(1, nr_channels):
-            new_channel = tifffile.imread(os.path.join(INPUT_DIR, f"{file_root}_C{ch + 1}.tif"))
-            image = np.stack((image, new_channel))
-        if nr_channels == 1:
-            image = np.expand_dims(image, 0)  # adding non existing channel dimension
-            if image.ndim == 3:  # There was no z so we add it
-                image = np.expand_dims(image, 0)
+        with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file:
+            config = json.load(config_file)
 
-        print(f"Processing file {file_root}")
+        nr_channels = config["nr_channels"]
+        files_set = {f[:-7] for f in os.listdir(INPUT_DIR) if f.endswith('.tif')}
 
-        raw_image_id = crop_to_raw["_".join(file_root.split("_")[:-1])]
-        sir_image_id = crop_to_SIR["_".join(file_root.split("_")[:-1])]
-        raw_image = conn.getObject('Image', raw_image_id)
-        sir_image = conn.getObject('Image', sir_image_id)
+        for file_root in files_set:
+            image = tifffile.imread(os.path.join(INPUT_DIR, f"{file_root}_C1.tif"))
 
-        raw_image_name = raw_image.getName()
-        raw_channels = raw_image.getChannels()
+            for ch in range(1, nr_channels):
+                new_channel = tifffile.imread(os.path.join(INPUT_DIR, f"{file_root}_C{ch + 1}.tif"))
+                image = np.stack((image, new_channel))
+            if nr_channels == 1:
+                image = np.expand_dims(image, 0)  # adding non existing channel dimension
+                if image.ndim == 3:  # There was no z so we add it
+                    image = np.expand_dims(image, 0)
 
-        # Remove deteted DAPI
-        if nr_channels < raw_image.getSizeC():
-            if raw_channels[-1].getEmissionWave() != 435.0:
-                raise Exception('The last wavelength is not DAPI')
+            # print(f"Processing file {file_root}")
 
-        channel_names = [CHANNEL_NAME_MAPPINGS[str(raw_image.getChannelLabels()[c])] for c in range(nr_channels)]
+            raw_image_id = crop_to_raw["_".join(file_root.split("_")[:-1])]
+            sir_image_id = crop_to_SIR["_".join(file_root.split("_")[:-1])]
+            raw_image = conn.getObject('Image', raw_image_id)
+            sir_image = conn.getObject('Image', sir_image_id)
 
-        excitation_wavelengths = [ch.getExcitationWave() for ch in raw_channels[:nr_channels]]
-        emission_wavelengths = [ch.getEmissionWave() for ch in raw_channels[:nr_channels]]
+            raw_image_name = raw_image.getName()
+            raw_channels = raw_image.getChannels()
 
-        metadata = {
-                    # 'axes': 'CZYX',
-                    # # OME attributes
-                    # 'UUID'
-                    # 'Creator'
-                    # OME.Image attributes
-                    # 'Name'
-                    # OME.Image elements
-                    'AcquisitionDate': raw_image.getDate().date(),  # Remove time
-                    # 'AcquisitionDate': raw_image.getDate(),  # Remove time
-                    # 'AcquisitionDate': '2020-11-01T12:12:12',  # Remove time
-                    'Description': "3D 3Beam SI",
-                    # OME.Image.Pixels attributes:
-                    # 'SignificantBits'
-                    # 'PhysicalSizeX': 0.04,
-                    # 'PhysicalSizeXUnit': 'µm',
-                    # 'PhysicalSizeY': 0.04,
-                    # 'PhysicalSizeYUnit': 'µm',
-                    # 'PhysicalSizeZ': 0.125,
-                    # 'PhysicalSizeZUnit': 'µm',
-                    # 'TimeIncrement'
-                    # 'TimeIncrementUnit'
-                    'Plane': {
-                              # 'ExposureTime': [.3] * (56 * nr_channels),
-                              # 'ExposureTimeUnit': ['msec'] * (56 * nr_channels),
-                              # 'PositionX'
-                              # 'PositionXUnit'
-                              # 'PositionY'
-                              # 'PositionYUnit'
-                              # 'PositionZ'
-                              # 'PositionZUnit'
-                              },
-                    'Channel': {'Name': channel_names,
-                                # 'AcquisitionMode'
-                                # 'Color'
-                                # 'ContrastMethod'
-                                'EmissionWavelength': emission_wavelengths,
-                                'EmissionWavelengthUnit': ['nm'] * nr_channels,
-                                'ExcitationWavelength': excitation_wavelengths,
-                                'ExcitationWavelengthUnit': ['nm'] * nr_channels,
-                                # 'Fluor'
-                                # 'IlluminationType'
-                                # 'NDFilter': "",
-                                # 'PinholeSize'
-                                # 'PinholeSizeUnit'
-                                # 'PockelCellSetting'
-                                # 'SamplesPerPixel'
-                                }
-                    }
-        #
-        # with tifffile.TiffWriter(os.path.join(OUTPUT_DIR, file_root + ".ome.tif")) as tif:
-        #     tif.write(image, **metadata)
+            # Verify channel matching
+            if nr_channels < raw_image.getSizeC():
+                excitation_wavelengths = [raw_channels[ch].getExcitationWave() for ch in
+                                          config["raw-crop_channel_mapping"]]
+                emission_wavelengths = [raw_channels[ch].getEmissionWave() for ch in config["raw-crop_channel_mapping"]]
+            elif nr_channels == raw_image.getSizeC():
+                excitation_wavelengths = [raw_channels[ch].getExcitationWave() for ch in
+                                          range(nr_channels)]
+                emission_wavelengths = [raw_channels[ch].getEmissionWave() for ch in range(nr_channels)]
+            else:
+                raise Exception("There were more channels in the crop than in the raw image")
 
-        xtiff.to_tiff(img=image.transpose((1, 0, 2, 3)),
-                      file=os.path.join(OUTPUT_DIR, file_root + ".ome.tiff"),
-                      image_date=raw_image.getDate().date(),
-                      channel_names=channel_names,
-                      profile=xtiff.tiff.TiffProfile.OME_TIFF,
-                      pixel_size=round(sir_image.getPixelSizeX(), 5),
-                      pixel_depth=round(sir_image.getPixelSizeZ(), 5),
-                      ome_xml_fun=get_ome_xml,
-                      **metadata
-                      )
+
+
+            channel_names = [CHANNEL_NAME_MAPPINGS[str(raw_image.getChannelLabels()[c])] for c in range(nr_channels)]
+
+
+            metadata = {
+                # 'axes': 'CZYX',
+                # # OME attributes
+                # 'UUID'
+                # 'Creator'
+                # OME.Image attributes
+                # 'Name'
+                # OME.Image elements
+                'AcquisitionDate': raw_image.getDate().date(),  # Remove time
+                # 'AcquisitionDate': raw_image.getDate(),  # Remove time
+                # 'AcquisitionDate': '2020-11-01T12:12:12',  # Remove time
+                'Description': "3D 3Beam SI",
+                # OME.Image.Pixels attributes:
+                # 'SignificantBits'
+                # 'PhysicalSizeX': 0.04,
+                # 'PhysicalSizeXUnit': 'µm',
+                # 'PhysicalSizeY': 0.04,
+                # 'PhysicalSizeYUnit': 'µm',
+                # 'PhysicalSizeZ': 0.125,
+                # 'PhysicalSizeZUnit': 'µm',
+                # 'TimeIncrement'
+                # 'TimeIncrementUnit'
+                'Plane': {
+                    # 'ExposureTime': [.3] * (56 * nr_channels),
+                    # 'ExposureTimeUnit': ['msec'] * (56 * nr_channels),
+                    # 'PositionX'
+                    # 'PositionXUnit'
+                    # 'PositionY'
+                    # 'PositionYUnit'
+                    # 'PositionZ'
+                    # 'PositionZUnit'
+                },
+                'Channel': {'Name': channel_names,
+                            # 'AcquisitionMode'
+                            # 'Color'
+                            # 'ContrastMethod'
+                            'EmissionWavelength': emission_wavelengths,
+                            'EmissionWavelengthUnit': ['nm'] * nr_channels,
+                            'ExcitationWavelength': excitation_wavelengths,
+                            'ExcitationWavelengthUnit': ['nm'] * nr_channels,
+                            # 'Fluor'
+                            # 'IlluminationType'
+                            # 'NDFilter': "",
+                            # 'PinholeSize'
+                            # 'PinholeSizeUnit'
+                            # 'PockelCellSetting'
+                            # 'SamplesPerPixel'
+                            }
+            }
+            #
+            # with tifffile.TiffWriter(os.path.join(OUTPUT_DIR, file_root + ".ome.tif")) as tif:
+            #     tif.write(image, **metadata)
+
+            xtiff.to_tiff(img=image.transpose((1, 0, 2, 3)),
+                          file=os.path.join(OUTPUT_DIR, file_root + ".ome.tiff"),
+                          image_date=raw_image.getDate().date(),
+                          channel_names=channel_names,
+                          profile=xtiff.tiff.TiffProfile.OME_TIFF,
+                          pixel_size=round(sir_image.getPixelSizeX(), 5),
+                          pixel_depth=round(sir_image.getPixelSizeZ(), 5),
+                          ome_xml_fun=get_ome_xml,
+                          **metadata
+                          )
 
 finally:
     conn.close()
