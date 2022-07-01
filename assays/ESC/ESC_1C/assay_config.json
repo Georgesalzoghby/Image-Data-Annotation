@@ -14,5 +14,6 @@
   "merges": {"Cell Line Name": "cell_lines.csv",
              "Probe Ch0": "probe_table.csv"
   },
-  "nr_channels": 1
+  "nr_channels": 1,
+  "raw-crop_channel_mapping": [0]
 }
