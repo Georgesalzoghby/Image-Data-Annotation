@@ -12,8 +12,7 @@
     "Number Of Channels",
     "Aligned Tag",
     "Thresholded Tag",
-    "Image Number",
-    "Ch Number"
+    "Image Number"
     ],
   "merges": {"Cell Line Name": "cell_lines.csv",
              "Protocol": "treatment_protocol.csv",

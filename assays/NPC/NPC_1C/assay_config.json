@@ -8,8 +8,7 @@
     "Probe Ch0",
     "Sir Tag",
     "Thresholded Tag",
-    "Image Number",
-    "Ch Number"
+    "Image Number"
   ],
   "merges": {"Cell Line Name": "cell_lines.csv",
              "Probe Ch0": "probe_table_ch0.csv"

@@ -8,8 +8,7 @@
     "Staining Ch0",
     "Sir Tag",
     "Thresholded Tag",
-    "Image Number",
-    "Ch Number"
+    "Image Number"
      ],
   "merges": {"Cell Line Name": "cell_lines.csv"
   },
