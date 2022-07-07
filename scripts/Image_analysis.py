@@ -13,8 +13,23 @@ from skimage.morphology import remove_small_objects
 from porespy.metrics import regionprops_3D
 
 # Input and output directories
-INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged"
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID'
+# INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged"
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_DAPI'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_TAD'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_1C'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_2C'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_DAPI'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_1C'
+INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_2C'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_1C'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_2C'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_1C'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_2C'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
 OUTPUT_DIR = f'{INPUT_DIR}'
 
 # Properties to measure
@@ -66,6 +81,7 @@ with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file
     config = json.load(config_file)
 
 nr_channels = config["nr_channels"]
+assay_id = config["assay_id"]
 
 
 # Function definitions
@@ -249,7 +265,7 @@ def run():
 
     analysis_df.to_csv(os.path.join(OUTPUT_DIR, 'analysis_df.csv'))
 
-    metadata_df = pd.read_csv(os.path.join(INPUT_DIR, "Experiment_A_assays.csv"), header=1)
+    metadata_df = pd.read_csv(os.path.join(INPUT_DIR, f"{assay_id}_assays.csv"), header=1)  # TODO:
 
     merge_df = pd.merge(metadata_df, analysis_df, on="Image Name")
     merge_df.to_csv(os.path.join(OUTPUT_DIR, 'merged_df.csv'))
