@@ -2,6 +2,7 @@ from typing import Optional, Sequence
 from xml.etree import ElementTree
 
 import os
+from time import sleep
 import json
 import numpy as np
 import tifffile
@@ -103,7 +104,7 @@ def get_ome_xml(img: np.ndarray, image_name: Optional[str], channel_names: Optio
 
 
 # sourcery skip: merge-nested-ifs, raise-specific-error, use-fstring-for-concatenation
-CHANNEL_NAME_MAPPINGS = {'683.0': 'Alexa-647', '608.0': 'ATTO-565', '528.0': 'Alexa-555', '435': 'DAPI'}
+CHANNEL_NAME_MAPPINGS = {'683.0': 'ATTO-647', '608.0': 'ATTO-565', '528.0': 'Alexa-488', '435': 'DAPI'}
 
 INPUT_DIRS = [
     "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX",
@@ -146,6 +147,9 @@ try:
         files_set = {f[:-7] for f in os.listdir(INPUT_DIR) if f.endswith('.tif')}
 
         for file_root in files_set:
+            sleep(1)
+            # if os.path.exists(os.path.join(INPUT_DIR, f"{file_root}.ome.tiff")):
+            #     continue
             image = tifffile.imread(os.path.join(INPUT_DIR, f"{file_root}_C1.tif"))
 
             for ch in range(1, nr_channels):
@@ -163,7 +167,7 @@ try:
             raw_image = conn.getObject('Image', raw_image_id)
             sir_image = conn.getObject('Image', sir_image_id)
 
-            raw_image_name = raw_image.getName()
+            # raw_image_name = raw_image.getName()
             raw_channels = raw_image.getChannels()
 
             # Verify channel matching
@@ -178,10 +182,7 @@ try:
             else:
                 raise Exception("There were more channels in the crop than in the raw image")
 
-
-
             channel_names = [CHANNEL_NAME_MAPPINGS[str(raw_image.getChannelLabels()[c])] for c in range(nr_channels)]
-
 
             metadata = {
                 # 'axes': 'CZYX',
