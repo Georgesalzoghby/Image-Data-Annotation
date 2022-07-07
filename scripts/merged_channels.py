@@ -107,22 +107,22 @@ def get_ome_xml(img: np.ndarray, image_name: Optional[str], channel_names: Optio
 CHANNEL_NAME_MAPPINGS = {'683.0': 'ATTO-647', '608.0': 'ATTO-565', '528.0': 'Alexa-488', '435': 'DAPI'}
 
 INPUT_DIRS = [
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_DAPI",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_TAD",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_1C",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_2C",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_DAPI",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_1C",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_2C",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_1C",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_2C",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_1C",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_2C",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX",
-    "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL"
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_DAPI",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_TAD",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_1C",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_2C",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_DAPI",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_1C",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_2C",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_1C",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_2C",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_1C",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_2C",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX",
+    ## "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL"
             ]
 
 try:
