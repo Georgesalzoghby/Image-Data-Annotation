@@ -20,5 +20,6 @@
              "Probe Ch1": "probe_table_ch1.csv"
   },
   "nr_channels": 2,
-  "raw-crop_channel_mapping": [0, 1]
+  "raw-crop_channel_mapping": [0, 1],
+  "fluorophores": ["ATTO-647", "ATTO-565"]
 }
