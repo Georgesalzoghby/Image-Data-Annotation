@@ -24,6 +24,7 @@ def run(assays_directory, image_files_extension, token_sep="_"):
             assay_id = config["assay_id"]
             column_names = config["column_names"]
             merges = config["merges"]
+            fluorophores = config["fluorophores"]
 
             files_list = [f for f in os.listdir(assay_dir) if f.endswith(image_files_extension)]
             table = df(columns=column_names)
@@ -32,6 +33,8 @@ def run(assays_directory, image_files_extension, token_sep="_"):
                 line = [[file_name] + file_name.split(sep=token_sep)]
                 line[0][-1] = line[0][-1][:-len(image_files_extension)]
                 line = df(line, columns=column_names)
+                for ch in range(len(fluorophores)):
+                    line[f"Label Ch{ch}"] = fluorophores[ch]
                 table = pd.concat([table, line], ignore_index=True)
 
             for col_name, table_file in merges.items():
