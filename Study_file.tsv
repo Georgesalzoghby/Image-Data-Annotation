@@ -57,7 +57,7 @@ Term Source File	http://purl.obolibrary.org/obo/	http://www.ebi.ac.uk/efo/	http:
 # EXPERIMENT SECTION																																	
 # Experiment Section containing all information relative to each experiment in the study including materials used, protocols names and description, phenotype names and description. For multiple experiments this section should be repeated.  Copy and paste the whole section below and fill out for the next experiment																																	
 																																	
-Experiment Number	            '1' ----> ESC																															
+Experiment Number	            '1' or 'A' ----> ESC																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -76,7 +76,8 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Mouse ESCs (E14Tg2a.4 cell line, MMRRC, UC Davis) were cultured on 0.1% gelatin-coated (catalog no.G1890-100G; Sigma-Aldrich) dishes in Glasgow’s MEM (catalog no. 21710025; Gibco), supplemented with 15% FCS qualified serum (catalog no. 26140079, US origin; Thermo Fisher Scientific), 1x GlutaMAX (catalog no. 35050038; Thermo Fisher Scientific), 1x MEM non-essential amino acids solution (catalog no.11140035; Thermo Fisher Scientific), 50 U penicillin-streptomycin (catalog no.15140122; Gibco), 0.1 mM sodium pyruvate (catalog no. 11360070; Gibco), 0.1 mM 2-mercaptoethanol (catalog no. 31350010; Gibco) and 1,000 U ml−1 recombinant mouse LIF protein (catalog no. ESG1107; Sigma-Aldrich). The medium was changed every day and cells were passaged every 2 d using the TrypLE express enzyme (catalog no. 12604013; Gibco).
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	 Mouse standard E14 cell line (E14Tg2a.4) were purchased directly from MMRRC, UC Davis, and were not re-authenticated besides the presence of the Oct4 ESC marker (monitored by RTqPCR and immuno-labeling  using an anti-Oct4 antibody (catalog no. 5677S; Cell signaling)).  The successful hybridization of oligopaints recognizing mouse-specific sequences to the genome is another quality control for the nature of the cells.
+
 																																			
 																	
 # Protocols																																	
@@ -112,7 +113,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 
-Experiment Number	            '2' ----> NPC																															
+Experiment Number	            '2' or 'B' ----> NPC																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -131,8 +132,8 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Mouse ESCs of Experiment A were differentiated into NPCs as described by Gaspard et al. (doi: 10.1038/nprot.2009.157) with the following changes. Cells were plated (2.5 × 105 cells per 10-cm dish) on 0.1% gelatin-coated dishes in the ESC medium described in Experiment A. After 1 d, cells were cultured in DDM medium (DMEM/F-12, GlutaMAX supplement; catalog no. 31331028; Gibco), supplemented with 0.05% bovine albumin fraction (catalog no. 15260037; Gibco), 1× MEM non-essential amino acids, 50 U penicillin-streptomycin, 1× N-2 supplement (catalog no. 17502048; Gibco), 1 mM sodium pyruvate and 0.1 mM 2-mercaptoethanol. From day 2 to day 10, medium was changed every 2 d and cyclopamine V. californicum (catalog no. 239803; Merck Millipore) was added to the medium (final concentration of 0.4 μg ml−1). After 12 d of differentiation, cells were dissociated with StemPro Accutase (catalog no. A1110501; Gibco), plated on 6-well plates coated with poly-L-lysine (catalog no. P2636; Sigma-Aldrich)/laminin (catalog no. 11243217001; Sigma-Aldrich) and cultured in a 1:1 mixture of DDM and neurobasal medium (catalog no. 21103049; Gibco) supplemented with 1× B-27 supplement minus vitamin A (catalog no. 12587010; Gibco) and 1× GlutaMAX supplement and 50 U penicillin-streptomycin for an additional 2 d (day 12 + 2) to obtain NPCs.
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
-																																			
+Quality Control Description	Mouse NPCs were obtained from differentiation of ESCs described in Experiment A. The presence of the Pax6 NPC marker was verified by RTqPCR and immuno-labeling using an anti-Pax6 (catalog no. PRB-278P-0100; Covance).
+																																
 																	
 # Protocols																																	
 Protocol Name	growth protocol	treatment protocol	image acquistion and feature extraction protocol	data analysis protocol																													
@@ -166,7 +167,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 			
-Experiment Number	            '3' ----> ncxNPC																														
+Experiment Number	            '3' or 'C' ----> ncxNPC																														
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -185,9 +186,9 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Mouse brains from E14.5 C57BL/6J embryos were dissected and fixed in 4% paraformaldehyde (PFA) overnight at 4 °C. They were then cryopreserved for 24 h at 4 °C in a PBS-20% sucrose solution. After embedding in optimal cutting temperature compound and rapid freezing in isopentane, brains were sectioned at 10-μm width on slides with a cryostat (Leica Biosystems).
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	NPC were localized according to their position in the brain neocortex, i.e. in the ventricular zone containing apical progenitors (Pax6 positive NPC) (Bonev et al., doi: 10.1016/j.cell.2017.09.043).
 																																			
-																	
+																
 # Protocols																																	
 Protocol Name	growth protocol	treatment protocol	image acquistion and feature extraction protocol	data analysis protocol																													
 Protocol Type	growth protocol	treatment protocol	image acquistion and feature extraction protocol	data analysis protocol																													
@@ -221,7 +222,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 			
-Experiment Number	            '4' ----> CTCF-AID_AUX-CTL																														
+Experiment Number	            '4' or 'D' ----> CTCF-AID_AUX-CTL																														
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -240,7 +241,7 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Mouse CTCF-AID ES cells (ID no. EN204.3; doi: 10.1016/j.molcel.2019.08.015) were cultured in the same condition as in Experiment A. They represent the control condition of Experiment E.
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	mESC E14 CTCF-GFP-Tir1-TIGRE (referred to as CTCF-AID) was originally described in Saldaña-Meyer et al. (doi: 10.1016/j.molcel.2019.08.015). The parental mESC E14 used to generate mESC E14 CTCF-GFP-Tir1-TIGRE line was initially authenticated in the laboratory of Benoit Bruneau by karyotyping and genotyping with primers that detected homozygous SNPs of 129 strains, but was not re-authenticated for this study. Same cells as in Experiment E.
 																																			
 																	
 # Protocols																																	
@@ -275,7 +276,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 		
-Experiment Number	            '5' ----> CTCF-AID_AUX																															
+Experiment Number	            '5' or 'E'----> CTCF-AID_AUX																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -294,7 +295,7 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Mouse CTCF-AID ES cells (ID no. EN204.3; doi: 10.1016/j.molcel.2019.08.015) were cultured in the same condition as in Experiment A. The induction of CTCF degradation by the Auxin-inducible degron (AID) system (referred to as AUX) was performed as described in Nora et al. (doi: 10.1016/j.cell.2017.05.004). Briefly, indole-3-acetic acid sodium salt (auxin analog; catalog no. 16954; Cayman Chemical) was added to the medium (final concentration at 500 µM) for 2 d before collecting cells. Control condition of Experiment D was performed with the same cells and in the same conditions, but without the auxin treatment.
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	mESC E14 CTCF-GFP-Tir1-TIGRE (referred to as CTCF-AID), same cells as in Experiment D. The CTCF degradation (after AUX treatment) was verified by Western-Blot using an anti-CTCF antibody (catalog no. 61311; Active motif) and an anti-Vinculin (catalog no. sc-73614; SantaCruz) as loading control.
 																																			
 																	
 # Protocols																																	
@@ -329,7 +330,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 
-Experiment Number	            '6' ----> RAD21-AID_AUX-CTL																															
+Experiment Number	            '6' or 'F' ----> RAD21-AID_AUX-CTL																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -348,7 +349,8 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Mouse RAD21-AID cells (EN272.2 cell line, this study) were cultured in the same condition as in Experiment A. They represent the control condition of Experiment G or 7.
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	mESC E14 RAD21-eGFP-Tir1-TIGRE (refered to as RAD21-AID) are described in this study. They were generated in the laboratory of Benoit Bruneau and are described in the methods section of the paper. The parental mESC E14 used to generate mESC E14 RAD21-eGFP-Tir1-TIGRE line was initially authenticated in the laboratory of Benoit Bruneau by karyotyping and genotyping with primers that detected homozygous SNPs of 129 strains, but were not re-authenticated for this study. Same cells as in Experiment G. 
+
 																																																		
 # Protocols																																	
 Protocol Name	growth protocol	treatment protocol	image acquistion and feature extraction protocol	data analysis protocol																													
@@ -382,7 +384,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 
-Experiment Number	            '7' ----> RAD21-AID-AUX																															
+Experiment Number	            '7' or 'G' ----> RAD21-AID-AUX																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -401,7 +403,7 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Mouse RAD21-AID cells (EN272.2 cell line, this study) were cultured in the same condition as in Experiment A. For the induction of RAD21 degradation by the Auxin-inducible degron (AID) system (referred to as AUX), indole-3-acetic acid sodium salt (auxin analog; catalog no. 16954; Cayman Chemical) was added to the medium (final concentration at 500 μM) for 6 h before collecting cells. Control condition of Experiment F was performed with the same cells and in the same conditions, but without the auxin treatment.
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	mESC E14 RAD21-eGFP-Tir1-TIGRE (refered to as RAD21-AID), same cells as in Experiment F. The RAD21 degradation (after AUX treatment) was verified by Western-Blot using an anti-RAD21 antibody (catalog no. ab154769; Abcam) and an anti-Vinculin (catalog no. sc-73614; SantaCruz) as loading control.
 																																			
 																	
 # Protocols																																	
@@ -436,7 +438,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 
-Experiment Number	            '8' ----> ESC_TSA-CTL																														
+Experiment Number	            '8' or 'H' ----> ESC_TSA-CTL																														
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -455,7 +457,7 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	 Mouse ESCs (E14Tg2a.4 cell line, MMRRC, UC Davis) were cultured in the same condition as in Experiment A. They represent the control condition of Experiment I or 9.
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	Standard E14 cell line (E14Tg2a.4) from MMRRC, UC Davis were used as control. Cells were grown and harvest in the same time as the TSA treated cells.
 																																			
 																	
 # Protocols																																	
@@ -490,7 +492,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 
-Experiment Number	            '8' ----> ESC_TSA																															
+Experiment Number	            '8' or 'I' ----> ESC_TSA																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -509,7 +511,7 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Mouse ESCs (E14Tg2a.4 cell line, MMRRC, UC Davis) were cultured in the same condition as in Experiment A. ESCs were treated with trichostatin A (TSA), an inhibitor of histone deacetylases that induces histone hyperacetylation, with TSA (100 ng ml−1 final concentration; catalog no. T-8552; Sigma-Aldrich) for 6 h before collecting cells.
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	Standard E14 cell line (E14Tg2a.4) from MMRRC, UC Davis, treated with trichostatin A (TSA), an inhibitor of histone deacetylases that induces histone hyperacetylation. The effect of TSA after 6 hours treatment was verified by Western-Blot using an anti-acetyl-Histone H4 antibody (catalog no. 06-598; Sigma-Aldrich) and an anti-H4 (catalog no. 07-108; Sigma-Aldrich) as loading control.
 																																			
 																	
 # Protocols																																	
@@ -544,7 +546,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 
-Experiment Number	            '10' ---->ESC_DAPI																														
+Experiment Number	            '10' or 'J' ---->ESC_DAPI																														
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -563,7 +565,7 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Mouse ESCs (E14Tg2a.4 cell line, MMRRC, UC Davis) were cultured in the same condition as in Experiment A. 
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	Mouse standard E14 cell line (E14Tg2a.4) from MMRRC, UC Davis were used for DAPI staining.																																
 																																			
 																	
 # Protocols																																	
@@ -598,7 +600,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 
-Experiment Number	            '11' ----> Drosophila_DAPI																															
+Experiment Number	            '11' or 'K' ----> Drosophila_DAPI																															
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -617,7 +619,7 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Flies (Drosophila melanogaster) were raised in standard cornmeal yeast extract medium at 21 °C. Embryos were collected on agar/vinegar plates at stages 15–16 after egg laying, equivalent to a development of 12–16 h at 25 °C. Embryos were manually dechorionated on a double-sided adhesive tape and displayed on an agar/vinegar plate to avoid drying during manual selection under a GFP binocular. A Y-GFP reporter line (y[1], w[67c23];Dp(1;Y), y[+] P{ry+11} P{w[+mC]=ActGFP}JMR1) was used to select WT GFP+ male embryos (Szabo et al., doi: 10.1126/sciadv.aar8082). The reason of using this particular Drosophila line is explained in Experiment L.
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	The adult phenotype of the Y-GFP reporter line (y[1], w[67c23];Dp(1;Y), y[+] P{ry+11} P{w[+mC]=ActGFP}JMR1) was verified before the experiment.																																
 																																			
 																	
 # Protocols																																	
@@ -652,7 +654,7 @@ Processed Data Column Annotation Level	# for data and phenotype columns enter th
 Processed Data Column Description	# for each data and phenotype column, enter a brief description of what the value represents																																
 Processed Data Column Link To Assay File	# enter which column can be used to link the information in the processed data file to the assay file e.g. targeted protein, or gene identifier																																
 
-Experiment Number	            '12' ----> Drosophila_TAD																														
+Experiment Number	            '12' or 'L' ----> Drosophila_TAD																														
 Comment[IDR Experiment Name]	     # leave blank																																
 Experiment Description	# a brief description of the experiment																																
 Experiment Size	5D Images: 	    Average Image Dimension (XYZCT):55x55x56xCx1	Total Tb: 	# fill in any values you know																													
@@ -671,7 +673,7 @@ Experiment Assay File Format	tab-delimited text
 Assay Experimental Conditions	Flies (Drosophila melanogaster) were raised and embryos were processes as in Experiment K. To analyze the 110 kb Drosophila TAD in an haploid context, that is, on chromosome X in male embryos, a Y-GFP reporter line (y[1], w[67c23];Dp(1;Y), y[+] P{ry+11} P{w[+mC]=ActGFP}JMR1) was used to select WT GFP+ male embryos (Szabo et al., doi: 10.1126/sciadv.aar8082). For the sake of homogeneity and simplicity, the same Drosophila line was used in Experiment K.
 Assay Experimental Conditions Term Source REF	# leave blank																																
 Assay Experimental Conditions Term Accession	# leave blank																																
-Quality Control Description	# a brief description of the kind of quality control measures that were taken (if applicable)																																
+Quality Control Description	The adult phenotype of the Y-GFP reporter line (y[1], w[67c23];Dp(1;Y), y[+] P{ry+11} P{w[+mC]=ActGFP}JMR1) was verified before the experiment.																																
 																																			
 																	
 # Protocols																																	
