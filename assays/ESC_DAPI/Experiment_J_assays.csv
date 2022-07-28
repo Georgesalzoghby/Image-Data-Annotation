@@ -1,0 +1,5 @@
+# header s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s
+Image Name,Date,Refractive Index,Cell Line Name,Staining Ch0,Sir Tag,Thresholded Tag,Image Number,Label Ch0,Characteristics [Organism],Term Source 1 REF,Term Source 1 URL,Characteristics [Cell Line],Term Source 2 REF,Term Source 2 URL,Term Source 2 Accession
+20191115_RI5108_ESC_DAPI_SIR_THR_2.ome.tiff,20191115,RI5108,ESC,DAPI,SIR,THR,2,DAPI,Mus musculus,10090,http://purl.obolibrary.org/obo/NCBITaxon_10090,E14tg2a,EFO,http://www.ebi.ac.uk/efo/EFO_0006275,EFO_0006275
+20191115_RI5108_ESC_DAPI_SIR_THR_1.ome.tiff,20191115,RI5108,ESC,DAPI,SIR,THR,1,DAPI,Mus musculus,10090,http://purl.obolibrary.org/obo/NCBITaxon_10090,E14tg2a,EFO,http://www.ebi.ac.uk/efo/EFO_0006275,EFO_0006275
+20191115_RI5108_ESC_DAPI_SIR_THR_3.ome.tiff,20191115,RI5108,ESC,DAPI,SIR,THR,3,DAPI,Mus musculus,10090,http://purl.obolibrary.org/obo/NCBITaxon_10090,E14tg2a,EFO,http://www.ebi.ac.uk/efo/EFO_0006275,EFO_0006275
