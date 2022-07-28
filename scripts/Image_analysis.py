@@ -13,21 +13,13 @@ from skimage.morphology import remove_small_objects
 from porespy.metrics import regionprops_3D
 
 # Input and output directories
-# INPUT_DIR = "C:\\Users\\Al Zoghby\\PycharmProjects\\Image-Data-Annotation\\assays\\CTCF-AID_merged"
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_DAPI'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/Drosophila_TAD'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_1C'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_2C'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_DAPI'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_1C'
-INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_2C'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_1C'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_2C'
+INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_1C'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_2C'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
 OUTPUT_DIR = f'{INPUT_DIR}'
@@ -80,7 +72,6 @@ if not os.path.isdir(OUTPUT_DIR):
 with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file:
     config = json.load(config_file)
 
-nr_channels = config["nr_channels"]
 assay_id = config["assay_id"]
 
 
@@ -236,7 +227,10 @@ def run():
     for img_file in files_list:
         print(f'Processing image: {img_file}')
         image = imread(os.path.join(INPUT_DIR, img_file))
-        image = image.transpose((1, 0, 2, 3))
+        if image.ndim == 4:  # More than 1 channel
+            image = image.transpose((1, 0, 2, 3))
+        elif image.ndim == 3:  # One channel
+            image = np.expand_dims(image, 1)
 
         rois_df, domain_labels, subdomain_labels, overlap_labels = \
             process_image(image=image,
