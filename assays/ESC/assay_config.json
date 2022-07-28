@@ -1,0 +1,6 @@
+{
+  "assay_id": "Experiment_A",
+  "merges": {"Cell Line Name": "cell_lines.csv",
+             "Probe Ch0": "probe_table.csv"
+  }
+}
