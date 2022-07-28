@@ -45,9 +45,11 @@ def run(assays_directory, image_files_extension, token_sep="_"):
                                  )
             try:
                 if 'NPC' in assay_dir:
-                    table = table.drop(columns=["Cluster ESC Ch0", "Cluster ESC Ch1"])
+                    table = table.drop(columns=["Cluster ESC Ch0"])
+                    table = table.drop(columns=["Cluster ESC Ch1"])
                 else:
-                    table = table.drop(columns=["Cluster NPC Ch0", "Cluster NPC Ch1"])
+                    table = table.drop(columns=["Cluster NPC Ch0"])
+                    table = table.drop(columns=["Cluster NPC Ch1"])
             except KeyError:
                 pass
 

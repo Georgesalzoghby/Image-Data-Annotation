@@ -8,7 +8,7 @@ import omero_rois
 import numpy as np
 from tifffile import tifffile
 
-INPUT_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID"
+INPUT_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL"
 
 try:
     conn = BlitzGateway(username=input('username: '),
