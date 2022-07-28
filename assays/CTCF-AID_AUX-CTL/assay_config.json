@@ -1,0 +1,24 @@
+{
+  "assay_id": "Experiment_D",
+  "column_names": [
+    "Image Name",
+    "Date",
+    "Refractive Index",
+    "Cell Line Name",
+    "Protocol",
+    "Probe Ch0",
+    "Probe Ch1",
+    "Sir Tag",
+    "Number Of Channels",
+    "Aligned Tag",
+    "Thresholded Tag",
+    "Image Number",
+    "Ch Number"
+     ],
+  "merges": {"Cell Line Name": "cell_lines.csv",
+             "Protocol": "treatment_protocol.csv",
+             "Probe Ch0": "probe_table_ch0.csv",
+             "Probe Ch1": "probe_table_ch1.csv"
+  },
+  "nr_channels": 2
+}
