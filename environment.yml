@@ -16,5 +16,6 @@ dependencies:
   - pip:
     - omero-rois
     - omero-metadata
+    - omero-cli-render
     - xtiff
     - argh

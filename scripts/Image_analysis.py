@@ -15,11 +15,11 @@ from porespy.metrics import regionprops_3D
 # Input and output directories
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX'
-INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC'
+INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
 OUTPUT_DIR = f'{INPUT_DIR}'
