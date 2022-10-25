@@ -266,6 +266,7 @@ def run():
         if image.ndim == 4:  # More than 1 channel
             image = image.transpose((1, 0, 2, 3))
         elif image.ndim == 3:  # One channel
+            # TODO: Verify that this dimmension is added in the right axis
             image = np.expand_dims(image, 1)
 
         rois_df, domain_labels, subdomain_labels, overlap_labels = \
