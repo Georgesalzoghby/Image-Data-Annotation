@@ -10,16 +10,17 @@ from skimage.filters import gaussian, threshold_otsu
 from skimage.measure import label, regionprops_table
 from skimage.segmentation import clear_border, watershed, relabel_sequential
 from skimage.morphology import remove_small_objects
+from skimage.feature import peak_local_max
 from porespy.metrics import regionprops_3D
 
 # Input and output directories
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL'
+INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC'
-INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX'
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
 OUTPUT_DIR = f'{INPUT_DIR}'
@@ -62,6 +63,7 @@ OVERLAP_PROPERTIES = (
 IMAGE_FILE_EXTENSION = "ome.tiff"
 DOMAIN_MIN_VOLUME = 200  # Minimum volume for the regions
 SUBDOMAIN_MIN_VOLUME = 36  # Minimum volume for the regions
+SUBDOMAIN_MAX_NR = 10  # Maximum number of subdomains
 SIGMA = 0.5
 PIXEL_SIZE = (.125, .04, .04)  # as ZYX
 VOXEL_VOLUME = np.prod(PIXEL_SIZE)
@@ -108,6 +110,10 @@ def process_channel(channel: np.ndarray, properties: tuple, subdomain_properties
     domain_props_df.insert(loc=0, column='roi_type', value='domain')
 
     # Detecting Subdomains
+    markers = peak_local_max(channel,
+                             min_distance=3,
+                             threshhold_abs=threshold_otsu(channel),
+                             num_peaks=SUBDOMAIN_MAX_NR                             )
     subdomain_labels = watershed(np.invert(channel), mask=domain_labels)
     if subdomain_min_volume is not None:
         subdomain_labels = remove_small_objects(subdomain_labels, connectivity=subdomain_labels.ndim,
