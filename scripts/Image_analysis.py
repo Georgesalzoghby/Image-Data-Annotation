@@ -18,13 +18,13 @@ from porespy.metrics import regionprops_3D
 INPUT_DIR_LIST = [
     # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL',
     # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC',
+    # TODO: '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA',
+    # TODO: '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC',
+    # TODO: '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
     ]
 
 # Properties to measure

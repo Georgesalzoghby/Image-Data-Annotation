@@ -1,11 +1,14 @@
 import pandas as pd
 
+metadata_1_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_1C/Experiment_A_assays.csv"
+metadata_2_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/ESC_2C/Experiment_A_assays.csv"
+metadata_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC/Experiment_A_assays.csv"
 # metadata_1_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_1C/Experiment_I_assays.csv"
 # metadata_2_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/ESC_TSA_2C/Experiment_I_assays.csv"
 # metadata_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA/Experiment_I_assays.csv"
-metadata_1_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_1C/Experiment_H_assays.csv"
-metadata_2_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_2C/Experiment_H_assays.csv"
-metadata_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/Experiment_H_assays.csv"
+# metadata_1_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_1C/Experiment_H_assays.csv"
+# metadata_2_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/ESC_TSA-CTL_2C/Experiment_H_assays.csv"
+# metadata_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL/Experiment_H_assays.csv"
 # metadata_1_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_1C/Experiment_B_assays.csv"
 # metadata_2_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/NPC_2C/Experiment_B_assays.csv"
 # metadata_path = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC/Experiment_B_assays.csv"

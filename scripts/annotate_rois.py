@@ -8,7 +8,18 @@ import omero_rois
 import numpy as np
 from tifffile import tifffile
 
-INPUT_DIR = "/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL"
+
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC'
+# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX'
+INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
+
+
 
 try:
     conn = BlitzGateway(username=input('username: '),
@@ -34,7 +45,7 @@ try:
 
     def masks_from_labels_image_3d(
             labels_3d, rgba=None, c=None, t=None, text=None,
-            raise_on_no_mask=True):
+            raise_on_no_mask=True):  # sourcery skip: low-code-quality
         """
         Create a mask shape from a binary image (background=0)
 
@@ -124,7 +135,11 @@ try:
         # Domains
         try:
             domains_img = tifffile.imread(os.path.join(INPUT_DIR, f"{image_name[:-9]}_domains-ROIs.ome.tiff"))
-            domains_img = domains_img.transpose((1, 0, 2, 3))
+            if domains_img.ndim == 4:
+                domains_img = domains_img.transpose((1, 0, 2, 3))
+            elif domains_img.ndim == 3:
+                domains_img = np.expand_dims(domains_img, 0)
+
             for c, channel_labels in enumerate(domains_img):
                 if c == 0:
                     rgba = (255, 0, 0, 30)
@@ -144,7 +159,10 @@ try:
         # Subdomains
         try:
             subdomains_img = tifffile.imread(os.path.join(INPUT_DIR, f"{image_name[:-9]}_subdomains-ROIs.ome.tiff"))
-            subdomains_img = subdomains_img.transpose((1, 0, 2, 3))
+            if subdomains_img.ndim == 4:
+                subdomains_img = subdomains_img.transpose((1, 0, 2, 3))
+            elif subdomains_img.ndim == 3:
+                subdomains_img = np.expand_dims(subdomains_img, 0)
             for c, channel_labels in enumerate(subdomains_img):
                 if c == 0:
                     rgba = (180, 0, 0, 50)
