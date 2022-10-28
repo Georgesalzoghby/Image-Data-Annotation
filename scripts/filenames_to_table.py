@@ -18,13 +18,21 @@ def run(assays_directory, image_files_extension, token_sep="_"):
     for assay_dir in assay_dirs:
         try:
             print(assay_dir)
-            with open(os.path.join(assay_dir, 'assay_config.json'), mode="r") as config_file:
-                config = json.load(config_file)
+            try:
+                with open(os.path.join(assay_dir, 'assay_config.json'), mode="r") as config_file:
+                    config = json.load(config_file)
+            except FileNotFoundError:
+                continue
+            except json.decoder.JSONDecodeError as e:
+                print(f"Error in {assay_dir}")
 
-            assay_id = config["assay_id"]
-            column_names = config["column_names"]
-            merges = config["merges"]
-            fluorophores = config["fluorophores"]
+            try:
+                assay_id = config["assay_id"]
+                column_names = config["column_names"]
+                merges = config["merges"]
+                fluorophores = config["fluorophores"]
+            except KeyError:
+                continue
 
             files_list = [f for f in os.listdir(assay_dir) if f.endswith(image_files_extension)]
             table = df(columns=column_names)

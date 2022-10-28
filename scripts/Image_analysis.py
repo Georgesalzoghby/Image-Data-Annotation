@@ -5,6 +5,7 @@ from math import sqrt
 import numpy as np
 import pandas as pd
 import xtiff
+from scipy import ndimage
 from tifffile import imread
 from skimage.filters import gaussian, threshold_otsu
 from skimage.measure import label, regionprops_table
@@ -14,16 +15,17 @@ from skimage.feature import peak_local_max
 from porespy.metrics import regionprops_3D
 
 # Input and output directories
-INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
-OUTPUT_DIR = f'{INPUT_DIR}'
+INPUT_DIR_LIST = [
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
+    ]
 
 # Properties to measure
 DOMAIN_PROPERTIES = (
@@ -68,13 +70,33 @@ SIGMA = 0.5
 PIXEL_SIZE = (.125, .04, .04)  # as ZYX
 VOXEL_VOLUME = np.prod(PIXEL_SIZE)
 
-if not os.path.isdir(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
+markers_list = []
 
-with open(os.path.join(INPUT_DIR, 'assay_config.json'), mode="r") as config_file:
-    config = json.load(config_file)
-
-assay_id = config["assay_id"]
+footprint = np.array([[[0, 0, 0, 0, 0],
+                       [0, 1, 1, 1, 0],
+                       [0, 1, 1, 1, 0],
+                       [0, 1, 1, 1, 0],
+                       [0, 0, 0, 0, 0]],
+                      [[0, 1, 1, 1, 0],
+                       [1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1],
+                       [0, 1, 1, 1, 0]],
+                      [[0, 1, 1, 1, 0],
+                       [1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1],
+                       [0, 1, 1, 1, 0]],
+                      [[0, 1, 1, 1, 0],
+                       [1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1],
+                       [0, 1, 1, 1, 0]],
+                      [[0, 0, 0, 0, 0],
+                       [0, 1, 1, 1, 0],
+                       [0, 1, 1, 1, 0],
+                       [0, 1, 1, 1, 0],
+                       [0, 0, 0, 0, 0]]])
 
 
 # Function definitions
@@ -110,41 +132,22 @@ def process_channel(channel: np.ndarray, properties: tuple, subdomain_properties
     domain_props_df.insert(loc=0, column='roi_type', value='domain')
 
     # Detecting Subdomains
-    footprint = np.array([[[0, 0, 0, 0, 0],
-                             [0, 1, 1, 1, 0],
-                             [0, 1, 1, 1, 0],
-                             [0, 1, 1, 1, 0],
-                             [0, 0, 0, 0, 0]],
-                            [[0, 1, 1, 1, 0],
-                             [1, 1, 1, 1, 1],
-                             [1, 1, 1, 1, 1],
-                             [1, 1, 1, 1, 1],
-                             [0, 1, 1, 1, 0]],
-                            [[0, 1, 1, 1, 0],
-                             [1, 1, 1, 1, 1],
-                             [1, 1, 1, 1, 1],
-                             [1, 1, 1, 1, 1],
-                             [0, 1, 1, 1, 0]],
-                            [[0, 1, 1, 1, 0],
-                             [1, 1, 1, 1, 1],
-                             [1, 1, 1, 1, 1],
-                             [1, 1, 1, 1, 1],
-                             [0, 1, 1, 1, 0]],
-                            [[0, 0, 0, 0, 0],
-                             [0, 1, 1, 1, 0],
-                             [0, 1, 1, 1, 0],
-                             [0, 1, 1, 1, 0],
-                             [0, 0, 0, 0, 0]]])
-    markers = peak_local_max(channel,
-                             min_distance=3,
-                             # threshold_abs=threshold_otsu(channel),
-                             indices=False,
-                             num_peaks=SUBDOMAIN_MAX_NR,
-                             footprint=footprint,
-                             labels=domain_labels)
-    subdomain_labels = watershed(np.invert(channel),
+    coords = peak_local_max(channel,
+                            min_distance=3,
+                            threshold_abs=threshold_otsu(channel),
+                            num_peaks=SUBDOMAIN_MAX_NR,
+                            # footprint=footprint,
+                            footprint=np.ones((3, 3, 3)),
+                            labels=domain_labels
+                            )
+    mask = np.zeros(channel.shape, dtype=bool)
+    mask[tuple(coords.T)] = True
+    markers, _ = ndimage.label(mask)
+
+    subdomain_labels = watershed(-channel,
                                  markers=markers,
-                                 mask=domain_labels)
+                                 mask=domain_labels
+                                 )
     if subdomain_min_volume is not None:
         subdomain_labels = remove_small_objects(subdomain_labels, connectivity=subdomain_labels.ndim,
                                                 min_size=subdomain_min_volume)
@@ -253,8 +256,18 @@ def process_image(image, domain_properties, subdomain_properties, overlap_proper
     return rois_df, domain_labels, subdomain_labels, overlap_labels
 
 
-def run():
-    files_list = [f for f in os.listdir(INPUT_DIR) if
+def run(input_dir):
+    output_dir = f'{input_dir}'
+
+    if not os.path.isdir(output_dir):
+        os.makedirs(output_dir)
+
+    with open(os.path.join(input_dir, 'assay_config.json'), mode="r") as config_file:
+        config = json.load(config_file)
+
+    assay_id = config["assay_id"]
+
+    files_list = [f for f in os.listdir(input_dir) if
                   f.endswith(IMAGE_FILE_EXTENSION) and
                   not f.endswith(f"ROIs.{IMAGE_FILE_EXTENSION}")]
 
@@ -262,11 +275,11 @@ def run():
 
     for img_file in files_list:
         print(f'Processing image: {img_file}')
-        image = imread(os.path.join(INPUT_DIR, img_file))
+        image = imread(os.path.join(input_dir, img_file))
         if image.ndim == 4:  # More than 1 channel
             image = image.transpose((1, 0, 2, 3))
         elif image.ndim == 3:  # One channel
-            # TODO: Verify that this dimmension is added in the right axis
+            # TODO: Verify that this dimension is added in the right axis
             image = np.expand_dims(image, 1)
 
         rois_df, domain_labels, subdomain_labels, overlap_labels = \
@@ -282,27 +295,28 @@ def run():
         rois_df.insert(loc=0, column='Image Name', value=img_file)
 
         xtiff.to_tiff(img=domain_labels.transpose((1, 0, 2, 3)),
-                      file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_domains-ROIs.ome.tiff')
+                      file=os.path.join(output_dir, f'{img_file[:-9]}_domains-ROIs.ome.tiff')
                       )
         xtiff.to_tiff(img=subdomain_labels.transpose((1, 0, 2, 3)),
-                      file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_subdomains-ROIs.ome.tiff')
+                      file=os.path.join(output_dir, f'{img_file[:-9]}_subdomains-ROIs.ome.tiff')
                       )
         if overlap_labels is not None:
             xtiff.to_tiff(img=np.expand_dims(overlap_labels, axis=1),
-                          file=os.path.join(OUTPUT_DIR, f'{img_file[:-9]}_overlap-ROIs.ome.tiff')
+                          file=os.path.join(output_dir, f'{img_file[:-9]}_overlap-ROIs.ome.tiff')
                           )
 
         analysis_df = pd.concat([analysis_df, rois_df], ignore_index=True)
 
-    analysis_df.to_csv(os.path.join(OUTPUT_DIR, 'analysis_df.csv'))
+    analysis_df.to_csv(os.path.join(output_dir, 'analysis_df.csv'))
 
-    metadata_df = pd.read_csv(os.path.join(INPUT_DIR, f"{assay_id}_assays.csv"), header=1)  # TODO:
+    metadata_df = pd.read_csv(os.path.join(input_dir, f"{assay_id}_assays.csv"), header=1)  # TODO:
 
     merge_df = pd.merge(metadata_df, analysis_df, on="Image Name")
-    merge_df.to_csv(os.path.join(OUTPUT_DIR, 'merged_df.csv'))
+    merge_df.to_csv(os.path.join(output_dir, 'merged_df.csv'))
 
 
 if __name__ == '__main__':
-    run()
+    for input_dir in INPUT_DIR_LIST:
+        run(input_dir)
     print("done")
 
