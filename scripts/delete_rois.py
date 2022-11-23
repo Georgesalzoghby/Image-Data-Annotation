@@ -1,3 +1,5 @@
+## Bettter to use the CLI
+
 from getpass import getpass
 
 from omero.gateway import BlitzGateway, ColorHolder

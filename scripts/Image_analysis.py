@@ -21,10 +21,10 @@ INPUT_DIR_LIST = [
     '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC',
     # TODO: '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA',
     # TODO: '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL',
-    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC',
     # TODO: '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC',
-    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX',
-    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
     ]
 
 # Properties to measure
@@ -253,7 +253,17 @@ def process_image(image, domain_properties, subdomain_properties, overlap_proper
     if overlap_props_df is not None:
         rois_df = pd.concat([rois_df, overlap_props_df], ignore_index=True)
 
+    rois_df['Roi Name'] = rois_df.apply(lambda x: create_roi_name([rois_df["Channel ID"], rois_df['roi_type'], rois_df['label'].astype(str)]), axis=0)
+
     return rois_df, domain_labels, subdomain_labels, overlap_labels
+
+
+def create_roi_name(components):
+    if len(components) == 2:
+        return f"{components[0]}_label-{components[1]}"
+    elif len(components) == 3:
+        return f"ch-{components[0]}_{components[1]}_label-{components[2]}"
+
 
 
 def run(input_dir):
@@ -279,8 +289,7 @@ def run(input_dir):
         if image.ndim == 4:  # More than 1 channel
             image = image.transpose((1, 0, 2, 3))
         elif image.ndim == 3:  # One channel
-            # TODO: Verify that this dimension is added in the right axis
-            image = np.expand_dims(image, 1)
+            image = np.expand_dims(image, 0)
 
         rois_df, domain_labels, subdomain_labels, overlap_labels = \
             process_image(image=image,
@@ -305,14 +314,15 @@ def run(input_dir):
                           file=os.path.join(output_dir, f'{img_file[:-9]}_overlap-ROIs.ome.tiff')
                           )
 
+        rois_df.to_csv(os.path.join(output_dir, f'{img_file[:-9]}_table.csv'), index=False)
         analysis_df = pd.concat([analysis_df, rois_df], ignore_index=True)
 
-    analysis_df.to_csv(os.path.join(output_dir, 'analysis_df.csv'))
+    analysis_df.to_csv(os.path.join(output_dir, 'analysis_df.csv'), index=False)
 
     metadata_df = pd.read_csv(os.path.join(input_dir, f"{assay_id}_assays.csv"), header=1)  # TODO:
 
     merge_df = pd.merge(metadata_df, analysis_df, on="Image Name")
-    merge_df.to_csv(os.path.join(output_dir, 'merged_df.csv'))
+    merge_df.to_csv(os.path.join(output_dir, 'merged_df.csv'), index=False)
 
 
 if __name__ == '__main__':

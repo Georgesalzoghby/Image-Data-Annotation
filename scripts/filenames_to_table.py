@@ -34,7 +34,7 @@ def run(assays_directory, image_files_extension, token_sep="_"):
             except KeyError:
                 continue
 
-            files_list = [f for f in os.listdir(assay_dir) if f.endswith(image_files_extension)]
+            files_list = [f for f in os.listdir(assay_dir) if f.endswith(image_files_extension) and 'ROIs' not in f]
             table = df(columns=column_names)
 
             for file_name in files_list:
