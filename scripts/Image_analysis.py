@@ -253,17 +253,16 @@ def process_image(image, domain_properties, subdomain_properties, overlap_proper
     if overlap_props_df is not None:
         rois_df = pd.concat([rois_df, overlap_props_df], ignore_index=True)
 
-    rois_df['Roi Name'] = rois_df.apply(lambda x: create_roi_name([rois_df["Channel ID"], rois_df['roi_type'], rois_df['label'].astype(str)]), axis=0)
+    rois_df['Roi Name'] = rois_df[["Channel ID", 'roi_type', 'label']].apply(lambda x: create_roi_name(x), axis=1)
 
     return rois_df, domain_labels, subdomain_labels, overlap_labels
 
 
 def create_roi_name(components):
-    if len(components) == 2:
-        return f"{components[0]}_label-{components[1]}"
-    elif len(components) == 3:
-        return f"ch-{components[0]}_{components[1]}_label-{components[2]}"
-
+    if pd.isna(components[0]):
+        return f"{components[1]}_label-{components[2]}"
+    else:
+        return f"ch-{int(components[0])}_{components[1]}_label-{components[2]}"
 
 
 def run(input_dir):
