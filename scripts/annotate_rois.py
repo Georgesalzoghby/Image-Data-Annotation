@@ -21,18 +21,11 @@ INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/
 # INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
 
 
-def annotate_image(image_id, session_key, image_table_path):
-    cmd = ["omero",
-           "metadata",
-           "populate",
-           f"-k {session_key}",
-           f"--wait -1",
-           "--allow-nan",
-           f"--file {image_table_path}",
-           f"Image:{image_id}"
-           ]
+def annotate_image(image_id, image_table_path):
+    cmd = f"omero metadata populate --wait -1 --allow-nan --file {image_table_path} Image:{image_id}"
+
     try:
-        subprocess.run(cmd, check=True, stdout=subprocess.PIPE).stdout
+        subprocess.run(cmd, check=True, shell=True, stdout=subprocess.PIPE).stdout
     except subprocess.CalledProcessError as e:
         print(f'Input command: {cmd}')
         print()
@@ -49,6 +42,7 @@ def create_roi(img, shapes, name):
     roi.setImage(img._obj)
     roi.setName(rstring(name))
     for shape in shapes:
+        # shape.setTextValue(rstring(name))
         roi.addShape(shape)
     # Save the ROI (saves any linked shapes too)
     return updateService.saveAndReturnObject(roi)
@@ -158,6 +152,8 @@ try:
 
     for image in images:
         image_name = image.getName()
+        if image_name != "20190720_RI512_CTCF-AID_AUX_61b_62_SIR_2C_ALN_THR_10.ome.tiff":
+            continue
         print(f"annotating image: {image_name}")
 
         # Domains
@@ -219,13 +215,12 @@ try:
             pass
 
         # populate image table
-        try:
-            image_table_path = os.path.join(INPUT_DIR, f"{image_name[:-9]}_table.csv")
-            annotate_image(image.getId(),
-                           session_key=session_key,
-                           image_table_path=image_table_path)
-        except Exception as e:
-            raise e
+        # try:
+        #     image_table_path = os.path.join(INPUT_DIR, f"{image_name[:-9]}_table.csv")
+        #     annotate_image(image.getId(),
+        #                    image_table_path=image_table_path)
+        # except Exception as e:
+        #     raise e
 
 except Exception as e:
     print(e)

@@ -16,15 +16,15 @@ from porespy.metrics import regionprops_3D
 
 # Input and output directories
 INPUT_DIR_LIST = [
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL',
     # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX',
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL',
     '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC',
-    # TODO: '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA',
-    # TODO: '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC',
-    # TODO: '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
     ]
 
 # Properties to measure
@@ -253,7 +253,10 @@ def process_image(image, domain_properties, subdomain_properties, overlap_proper
     if overlap_props_df is not None:
         rois_df = pd.concat([rois_df, overlap_props_df], ignore_index=True)
 
-    rois_df['Roi Name'] = rois_df[["Channel ID", 'roi_type', 'label']].apply(lambda x: create_roi_name(x), axis=1)
+    if len(rois_df) > 0:
+        rois_df['Roi Name'] = rois_df[["Channel ID", 'roi_type', 'label']].apply(lambda x: create_roi_name(x), axis=1)
+    else:
+        rois_df['Roi Name'] = None
 
     return rois_df, domain_labels, subdomain_labels, overlap_labels
 
@@ -262,7 +265,7 @@ def create_roi_name(components):
     if pd.isna(components[0]):
         return f"{components[1]}_label-{components[2]}"
     else:
-        return f"ch-{int(components[0])}_{components[1]}_label-{components[2]}"
+        return f"ch-{int(components[0])}_{components[1]}_label-{int(components[2])}"
 
 
 def run(input_dir):
