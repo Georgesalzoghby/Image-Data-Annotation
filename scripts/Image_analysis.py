@@ -16,8 +16,8 @@ from porespy.metrics import regionprops_3D
 
 # Input and output directories
 INPUT_DIR_LIST = [
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX',
-    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX',
+    '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL',
     '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC',
     '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA',
     '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL',
@@ -319,12 +319,12 @@ def run(input_dir):
         rois_df.to_csv(os.path.join(output_dir, f'{img_file[:-9]}_table.csv'), index=False)
         analysis_df = pd.concat([analysis_df, rois_df], ignore_index=True)
 
-    analysis_df.to_csv(os.path.join(output_dir, 'analysis_df.csv'), index=False)
+    analysis_df.to_csv(os.path.join(output_dir, f'{assay_id}_analysis_df.csv'), index=False)
 
     metadata_df = pd.read_csv(os.path.join(input_dir, f"{assay_id}_assays.csv"), header=1)  # TODO:
 
     merge_df = pd.merge(metadata_df, analysis_df, on="Image Name")
-    merge_df.to_csv(os.path.join(output_dir, 'merged_df.csv'), index=False)
+    merge_df.to_csv(os.path.join(output_dir, f'{assay_id}_merged_df.csv'), index=False)
 
 
 if __name__ == '__main__':
