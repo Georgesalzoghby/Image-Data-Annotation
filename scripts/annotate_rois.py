@@ -2,6 +2,7 @@ import os
 from getpass import getpass
 import subprocess
 
+import pandas as pd
 from omero.gateway import BlitzGateway, ColorHolder
 from omero.rtypes import rdouble, rint, rstring
 from omero.model import RoiI, MaskI
@@ -10,22 +11,30 @@ import numpy as np
 from tifffile import tifffile
 
 
-INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX'
-# INPUT_DIR = '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL'
+INPUT_DIRS = {
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX': 28,
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/CTCF-AID_AUX-CTL': 15,
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC': 27,
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA': 30,
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ESC_TSA-CTL': 31,
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/ncxNPC': 33,
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/NPC': 32,
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX': 29,
+    # '/home/julio/Documents/data-annotation/Image-Data-Annotation/assays/RAD21-AID_AUX-CTL': 8
+}
 
 
 def annotate_image(image_id, image_table_path):
-    cmd = f"omero metadata populate --wait -1 --allow-nan --file {image_table_path} Image:{image_id}"
+    cmd = ["omero", "metadata", "populate",
+           "--wait", "-1",
+           "--allow-nan",
+           "--file",
+           image_table_path,
+           f"Image:{image_id}"
+    ]
 
     try:
-        subprocess.run(cmd, check=True, shell=True, stdout=subprocess.PIPE).stdout
+        subprocess.run(cmd, check=True, stdout=subprocess.PIPE).stdout
     except subprocess.CalledProcessError as e:
         print(f'Input command: {cmd}')
         print()
@@ -121,7 +130,7 @@ def masks_from_labels_image_3d(
     return rois
 
 
-def rois_from_labels_3d(img, labels_3d, rgba, c=None, t=None, text=None):
+def rois_from_labels_3d(img, labels_3d, rois_table=None, rgba=None, c=None, t=None, text=None):
     rois = masks_from_labels_image_3d(labels_3d, rgba=rgba, c=c, t=t,
                                       raise_on_no_mask=False)
 
@@ -131,7 +140,8 @@ def rois_from_labels_3d(img, labels_3d, rgba, c=None, t=None, text=None):
                 roi_name = f'{text}_label-{label}'
             else:
                 roi_name = f'ch-{c}_{text}_label-{label}'
-            create_roi(img=img, shapes=masks, name=roi_name)
+            roi = create_roi(img=img, shapes=masks, name=roi_name)
+            rois_table['roi'].loc[rois_table['Roi Name'] == roi_name] = roi.id.val
 
 
 try:
@@ -139,88 +149,114 @@ try:
         passwd=getpass('password: '),
         host="bioimage.france-bioinformatique.fr",
         port=4075,
-        # group="Cavalli Lab",
         secure=True)
     conn.connect()
 
     updateService = conn.getUpdateService()
     session_key = conn.getSession().getUuid().getValue()
 
-    dataset = conn.getObject('Dataset', int(input("Dataset ID: ")))
+    for input_dir, dataset_id in INPUT_DIRS.items():
 
-    images = dataset.listChildren()
+        dataset = conn.getObject('Dataset', dataset_id)
 
-    for image in images:
-        image_name = image.getName()
-        if image_name != "20190720_RI512_CTCF-AID_AUX_61b_62_SIR_2C_ALN_THR_10.ome.tiff":
-            continue
-        print(f"annotating image: {image_name}")
+        images = dataset.listChildren()
 
-        # Domains
-        try:
-            domains_img = tifffile.imread(os.path.join(INPUT_DIR, f"{image_name[:-9]}_domains-ROIs.ome.tiff"))
-            if domains_img.ndim == 4:
-                domains_img = domains_img.transpose((1, 0, 2, 3))
-            elif domains_img.ndim == 3:
-                domains_img = np.expand_dims(domains_img, 0)
+        for image in images:
+            image_name = image.getName()
+            # if image_name != "20190720_RI512_CTCF-AID_AUX_61b_62_SIR_2C_ALN_THR_10.ome.tiff":
+            #     continue
+            print(f"annotating image: {image_name}")
+            try:
+                image_table_path = os.path.join(input_dir, f"{image_name[:-9]}_table.csv")
+            except Exception as e:
+                raise e
 
-            for c, channel_labels in enumerate(domains_img):
-                if c == 0:
-                    rgba = (255, 0, 0, 30)
-                elif c == 1:
-                    rgba = (0, 255, 0, 30)
-                else:
-                    rgba = (0, 0, 255, 30)
+            image_table = pd.read_csv(image_table_path)
+            image_table['roi'] = None
 
+            # Domains
+            try:
+                domains_img = tifffile.imread(os.path.join(input_dir, f"{image_name[:-9]}_domains-ROIs.ome.tiff"))
+                if domains_img.ndim == 4:
+                    domains_img = domains_img.transpose((1, 0, 2, 3))
+                elif domains_img.ndim == 3:
+                    domains_img = np.expand_dims(domains_img, 0)
+
+                for c, channel_labels in enumerate(domains_img):
+                    if c == 0:
+                        rgba = (255, 0, 0, 30)
+                    elif c == 1:
+                        rgba = (0, 255, 0, 30)
+                    else:
+                        rgba = (0, 0, 255, 30)
+
+                    rois_from_labels_3d(img=image,
+                                        labels_3d=channel_labels,
+                                        rois_table=image_table,
+                                        rgba=rgba,
+                                        c=c,
+                                        text='domain')
+            except FileNotFoundError:
+                pass
+
+            # Subdomains
+            try:
+                subdomains_img = tifffile.imread(os.path.join(input_dir, f"{image_name[:-9]}_subdomains-ROIs.ome.tiff"))
+                if subdomains_img.ndim == 4:
+                    subdomains_img = subdomains_img.transpose((1, 0, 2, 3))
+                elif subdomains_img.ndim == 3:
+                    subdomains_img = np.expand_dims(subdomains_img, 0)
+                for c, channel_labels in enumerate(subdomains_img):
+                    if c == 0:
+                        rgba = (180, 0, 0, 50)
+                    elif c == 1:
+                        rgba = (0, 180, 0, 50)
+                    else:
+                        rgba = (0, 0, 180, 50)
+
+                    rois_from_labels_3d(img=image,
+                                        labels_3d=channel_labels,
+                                        rois_table=image_table,
+                                        rgba=rgba,
+                                        c=c,
+                                        text='subdomain')
+            except FileNotFoundError:
+                pass
+
+            # Overlaps
+            try:
+                overlap_img = tifffile.imread(os.path.join(input_dir, f"{image_name[:-9]}_overlap-ROIs.ome.tiff"))
+                rgba = (0, 0, 255, 80)
                 rois_from_labels_3d(img=image,
-                                    labels_3d=channel_labels,
+                                    labels_3d=overlap_img,
+                                    rois_table=image_table,
                                     rgba=rgba,
-                                    c=c,
-                                    text='domain')
-        except FileNotFoundError:
-            pass
+                                    text='overlap')
+            except FileNotFoundError:
+                pass
 
-        # Subdomains
-        try:
-            subdomains_img = tifffile.imread(os.path.join(INPUT_DIR, f"{image_name[:-9]}_subdomains-ROIs.ome.tiff"))
-            if subdomains_img.ndim == 4:
-                subdomains_img = subdomains_img.transpose((1, 0, 2, 3))
-            elif subdomains_img.ndim == 3:
-                subdomains_img = np.expand_dims(subdomains_img, 0)
-            for c, channel_labels in enumerate(subdomains_img):
-                if c == 0:
-                    rgba = (180, 0, 0, 50)
-                elif c == 1:
-                    rgba = (0, 180, 0, 50)
+            # Annotate image with table
+            csv_header = "# header "
+            for dt in list(image_table.dtypes)[:-1]:
+                if dt == np.int64:
+                    csv_header += 'l,'
+                elif dt == np.float64:
+                    csv_header += 'd,'
                 else:
-                    rgba = (0, 0, 180, 50)
+                    csv_header += 's,'
+            csv_header += 'roi'
 
-                rois_from_labels_3d(img=image,
-                                    labels_3d=channel_labels,
-                                    rgba=rgba,
-                                    c=c,
-                                    text='subdomain')
-        except FileNotFoundError:
-            pass
+            image_table_header_path = os.path.join(input_dir, f"{image_name[:-9]}_table_headers.csv")
+            with open(image_table_header_path, mode='w') as csv_file:
+                csv_file.write(csv_header)
+                csv_file.write("\n")
+                csv_file.write(image_table.to_csv(index=False, line_terminator='\n'))
 
-        # Overlaps
-        try:
-            overlap_img = tifffile.imread(os.path.join(INPUT_DIR, f"{image_name[:-9]}_overlap-ROIs.ome.tiff"))
-            rgba = (0, 0, 255, 80)
-            rois_from_labels_3d(img=image,
-                                labels_3d=overlap_img,
-                                rgba=rgba,
-                                text='overlap')
-        except FileNotFoundError:
-            pass
-
-        # populate image table
-        # try:
-        #     image_table_path = os.path.join(INPUT_DIR, f"{image_name[:-9]}_table.csv")
-        #     annotate_image(image.getId(),
-        #                    image_table_path=image_table_path)
-        # except Exception as e:
-        #     raise e
+            try:
+                annotate_image(image.getId(),
+                               image_table_path=image_table_header_path)
+            except Exception as e:
+                raise e
 
 except Exception as e:
     print(e)
